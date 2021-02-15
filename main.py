@@ -24,7 +24,16 @@ player = Obj(screen.get_width() / 2, screen.get_height() / 2, player_img, False,
 
 # block image
 block_img = pygame.image.load("assets/block.png")
-block_list = [[1,1,1,1,1,1,1,1,0,0,0,0,1,1]]
+block_list = [
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
 
 
 def tile_map(tile_map_array, image):
@@ -66,7 +75,7 @@ camera_obj = Obj(screen.get_width() / 2, screen.get_height() / 2, None)
 camera = Cam(camera_obj, object_list, player)
 
 while running:
-    clock.tick(60)
+    # clock.tick(60)
     # input handler
     key_state = pygame.key.get_pressed()
     horizontal = key_state[pygame.K_d] - key_state[pygame.K_a]
@@ -78,8 +87,6 @@ while running:
     # background
     screen.fill((203, 123, 123))
     # player update
-    for obj in object_list:
-        obj.update(screen)
     player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, object_list)
 
     # fps and time management
@@ -91,7 +98,7 @@ while running:
     current_time_ts = dt.timestamp(current_time_dt)
 
     # camera update
-    camera.update(object_list)
+    camera.update(object_list, screen)
 
     # screen update
     pygame.display.update()
