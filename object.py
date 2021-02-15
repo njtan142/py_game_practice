@@ -6,6 +6,8 @@ class Object:
     def __init__(self, x, y, image, centered=True, is_player=False):
         self.is_player = is_player
         self.image = image
+        self.float_x = 0
+        self.float_y = 0
         if image is None:
             self.x = x
             self.y = y
@@ -23,6 +25,25 @@ class Object:
         screen.blit(self.image, (self.x, self.y))
 
     def move(self, x, y, walls):
+        
+        self.float_x += x - int(x)
+        self.float_y += y - int(y)
+        x = int(x)
+        y = int(y)
+
+        if self.float_x > 0 and self.float_x > 1:
+            self.float_x -= 1
+            x += 1
+        if self.float_x < 0 and self.float_x < -1:
+            self.float_x -= -1
+            x -= 1
+        if self.float_y > 0 and self.float_y > 1:
+            self.float_y -= 1
+            y += 1
+        if self.float_y < 0 and self.float_y < -1:
+            self.float_y -= -1
+            y -= 1
+
         if x != 0:
             self.move_single_axis(x, 0, walls)
         if y != 0:
@@ -49,6 +70,7 @@ class Object:
                         self.rect.bottom = wall.rect.top
                     if dy < 0:  # Moving up; Hit the bottom side of the wall
                         self.rect.top = wall.rect.bottom
-        self.x = self.rect.x
-        self.y = self.rect.y
+                self.x = self.rect.x
+                self.y = self.rect.y
+        
 

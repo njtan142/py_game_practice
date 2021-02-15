@@ -16,7 +16,7 @@ def get_distance(object1, object2, x1, y1):
 
 
 pygame.init()
-screen = pygame.display.set_mode((720, 480))
+screen = pygame.display.set_mode((640, 480))
 clock = pygame.time.Clock()
 # player
 player_img = pygame.image.load("assets/werewolf.png")
@@ -24,30 +24,7 @@ player = Obj(screen.get_width() / 2, screen.get_height() / 2, player_img, False,
 
 # block image
 block_img = pygame.image.load("assets/block.png")
-block_list = [[1, 0, 1, 0, 1, 0, 0, 0, 1],
-              [1, 0, 1, 0, 0, 1, 0, 1],
-              [1, 0, 1, 0, 0, 1, 0, 1],
-              [1, 0, 1, 0, 0, 0, 1, 0],
-              [1, 0, 1, 0, 0, 0, 1, 0],
-              [1, 0, 1, 1, 1, 0, 1, 0],
-              [1, 0, 1, 0, 1, 0, 0, 0, 1],
-              [1, 0, 1, 0, 0, 1, 0, 1],
-              [1, 0, 1, 0, 0, 1, 0, 1],
-              [1, 0, 1, 0, 0, 0, 1, 0],
-              [1, 0, 1, 0, 0, 0, 1, 0],
-              [1, 0, 1, 1, 1, 0, 1, 0],
-              [1, 0, 1, 0, 1, 0, 0, 0, 1],
-              [1, 0, 1, 0, 0, 1, 0, 1],
-              [1, 0, 1, 0, 0, 1, 0, 1],
-              [1, 0, 1, 0, 0, 0, 1, 0],
-              [1, 0, 1, 0, 0, 0, 1, 0],
-              [1, 0, 1, 1, 1, 0, 1, 0],
-              [1, 0, 1, 0, 1, 0, 0, 0, 1],
-              [1, 0, 1, 0, 0, 1, 0, 1],
-              [1, 0, 1, 0, 0, 1, 0, 1],
-              [1, 0, 1, 0, 0, 0, 1, 0],
-              [1, 0, 1, 0, 0, 0, 1, 0],
-              [1, 0, 1, 1, 1, 0, 1, 0]]
+block_list = [[1,1,1,1,1,1,1,1,0,0,0,0,1,1]]
 
 
 def tile_map(tile_map_array, image):
@@ -102,19 +79,8 @@ while running:
     screen.fill((203, 123, 123))
     # player update
     for obj in object_list:
-        if obj == player:
-            continue
         obj.update(screen)
-        distance = get_distance(player, obj, horizontal * time_delta * 100, vertical * time_delta * 100)
-        param_x = player.x + horizontal * time_delta * 100
-        param_y = player.y + vertical * time_delta * 100
-        player_rect = pygame.Rect( param_x, param_y, player.image.get_width(), player.image.get_height())
-        if player_rect.colliderect(obj.rect):
-           pass
-
-    player.move(horizontal * 2, vertical * 2, object_list)
-
-    player.update(screen)
+    player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, object_list)
 
     # fps and time management
     last_time_dt = dt.now()

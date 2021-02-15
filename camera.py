@@ -9,12 +9,11 @@ class Camera:
         if follow is None:
             follow = self.follow
         self.follow = follow
-        horizontal_difference = self.obj.x - self.follow.x - follow.image.get_width()/2
-        vertical_difference = self.obj.y - self.follow.y - follow.image.get_height()/2
-
+        horizontal_difference = self.obj.x - self.follow.x 
+        vertical_difference = self.obj.y - self.follow.y
+        x = (horizontal_difference)
+        y = (vertical_difference)
         for obj in self.objects:
-            x = int(horizontal_difference)
-            y = int(vertical_difference)
             obj.move(x, y, list)
 
 
