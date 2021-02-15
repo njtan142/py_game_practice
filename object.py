@@ -1,13 +1,15 @@
 import pygame
+import math
 
 
 class Object:
 
-    def __init__(self, x, y, image, centered=True, is_player=False):
+    def __init__(self, x, y, image, centered=False, is_player=False):
         self.is_player = is_player
         self.image = image
         self.float_x = 0
         self.float_y = 0
+        self.visible = False
         if image is None:
             self.x = x
             self.y = y
@@ -21,11 +23,11 @@ class Object:
             self.y = y - image.get_height() / 2
             self.rect = pygame.rect.Rect(self.x, self.y, image.get_width(), image.get_height())
 
-    def update(self, screen):
+    def update(self, screen, loop=1):
         screen.blit(self.image, (self.x, self.y))
 
     def move(self, x, y, walls):
-        
+
         self.float_x += x - int(x)
         self.float_y += y - int(y)
         x = int(x)
@@ -44,33 +46,33 @@ class Object:
             self.float_y -= -1
             y -= 1
 
-        if x != 0:
+        if math.fabs(x) >= 1:
             self.move_single_axis(x, 0, walls)
-        if y != 0:
+        if math.fabs(y) >= 1:
             self.move_single_axis(0, y, walls)
 
     def move_single_axis(self, dx, dy, walls):
         self.x += dx
         self.y += dy
         # Move the rect
-        self.rect.x = int(self.x)
-        self.rect.y = int(self.y)
+        if self.visible:
+            self.rect.x = int(self.x)
+            self.rect.y = int(self.y)
 
         # If you collide with a wall, move out based on velocity
         if self.is_player:
-            for wall in walls:
-                if wall == self:
+            for obj in walls:
+                if obj == self:
                     continue
-                if self.rect.colliderect(wall.rect):
+                if self.rect.colliderect(obj.rect):
                     if dx > 0:  # Moving right; Hit the left side of the wall
-                        self.rect.right = wall.rect.left
+                        self.rect.right = obj.rect.left
                     if dx < 0:  # Moving left; Hit the right side of the wall
-                        self.rect.left = wall.rect.right
+                        self.rect.left = obj.rect.right
                     if dy > 0:  # Moving down; Hit the top side of the wall
-                        self.rect.bottom = wall.rect.top
+                        self.rect.bottom = obj.rect.top
                     if dy < 0:  # Moving up; Hit the bottom side of the wall
-                        self.rect.top = wall.rect.bottom
-                self.x = self.rect.x
-                self.y = self.rect.y
-        
-
+                        self.rect.top = obj.rect.bottom
+                if self.visible:
+                    self.x = self.rect.x
+                    self.y = self.rect.y

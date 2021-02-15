@@ -9,13 +9,14 @@ class Camera:
         if follow is None:
             follow = self.follow
         self.follow = follow
-        horizontal_difference = self.obj.x - self.follow.x
-        vertical_difference = self.obj.y - self.follow.y
-        x = horizontal_difference
-        y = vertical_difference
-        print(x, y)
+        x = self.obj.x - self.follow.x
+        y = self.obj.y - self.follow.y
         for obj in self.objects:
-            if 0 - obj.image.get_width() < obj.x < screen.get_width()\
-                    and 0 - obj.image.get_height() < obj.y < screen.get_height():
-                obj.update(screen)
             obj.move(x, y, object_list)
+            if obj.visible:
+                obj.update(screen)
+            if 0 - obj.image.get_width() < obj.x < screen.get_width() \
+                    and 0 - obj.image.get_height() < obj.y < screen.get_height():
+                obj.visible = True
+            else:
+                obj.visible = False
