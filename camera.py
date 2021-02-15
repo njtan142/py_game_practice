@@ -1,3 +1,4 @@
+
 class Camera:
 
     def __init__(self, self_object, object_list, follow):
@@ -13,10 +14,5 @@ class Camera:
         y = self.obj.y - self.follow.y
         for obj in self.objects:
             obj.move(x, y, object_list)
-            if obj.visible:
-                obj.update(screen)
-            if 0 - obj.image.get_width() < obj.x < screen.get_width() \
-                    and 0 - obj.image.get_height() < obj.y < screen.get_height():
-                obj.visible = True
-            else:
-                obj.visible = False
+            obj.update(screen)
+           

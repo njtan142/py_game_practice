@@ -1,15 +1,16 @@
 import pygame
 import math
 
-
 class Object:
 
     def __init__(self, x, y, image, centered=False, is_player=False):
+        self.loop = 1
         self.is_player = is_player
         self.image = image
         self.float_x = 0
         self.float_y = 0
-        self.visible = False
+        self.visible = True
+        self.initialized = False
         if image is None:
             self.x = x
             self.y = y
@@ -23,8 +24,17 @@ class Object:
             self.y = y - image.get_height() / 2
             self.rect = pygame.rect.Rect(self.x, self.y, image.get_width(), image.get_height())
 
-    def update(self, screen, loop=1):
-        screen.blit(self.image, (self.x, self.y))
+    def update(self, screen):
+        x = self.x
+        width = 0
+        for i in range(self.loop):
+            screen.blit(self.image, (x, self.y))
+            x -= self.image.get_width()
+            width += self.image.get_width()
+        self.rect.x = x + self.image.get_width()
+        self.rect.width = width
+           
+        
 
     def move(self, x, y, walls):
 
@@ -46,18 +56,22 @@ class Object:
             self.float_y -= -1
             y -= 1
 
+        
         if math.fabs(x) >= 1:
             self.move_single_axis(x, 0, walls)
+            
         if math.fabs(y) >= 1:
             self.move_single_axis(0, y, walls)
+        
+        
+
 
     def move_single_axis(self, dx, dy, walls):
         self.x += dx
         self.y += dy
         # Move the rect
-        if self.visible:
-            self.rect.x = int(self.x)
-            self.rect.y = int(self.y)
+        self.rect.x = int(self.x)
+        self.rect.y = int(self.y)
 
         # If you collide with a wall, move out based on velocity
         if self.is_player:
@@ -73,6 +87,5 @@ class Object:
                         self.rect.bottom = obj.rect.top
                     if dy < 0:  # Moving up; Hit the bottom side of the wall
                         self.rect.top = obj.rect.bottom
-                if self.visible:
-                    self.x = self.rect.x
-                    self.y = self.rect.y
+        self.x = self.rect.x
+        self.y = self.rect.y
