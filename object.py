@@ -1,6 +1,7 @@
 import pygame
 import math
 
+
 class Object:
 
     def __init__(self, x, y, image, centered=False, is_player=False):
@@ -37,11 +38,10 @@ class Object:
         if self.collision:
             self.rect.x = x + self.image.get_width()
             self.rect.width = width
-           
-        
 
-    def move(self, x, y, walls):
-
+    def move(self, x, y, walls=None):
+        if not self.is_player:
+            walls = None
         self.float_x += x - int(x)
         self.float_y += y - int(y)
         x = int(x)
@@ -60,15 +60,11 @@ class Object:
             self.float_y -= -1
             y -= 1
 
-        
         if math.fabs(x) >= 1:
             self.move_single_axis(x, 0, walls)
-            
+
         if math.fabs(y) >= 1:
             self.move_single_axis(0, y, walls)
-        
-        
-
 
     def move_single_axis(self, dx, dy, walls):
         self.x += dx

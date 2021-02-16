@@ -1,9 +1,10 @@
-import pygame
-from object import Object as Obj
-from camera import Camera as Cam
 from datetime import datetime as dt
-import asyncio
-import threading
+
+import pygame
+
+from camera import Camera as Cam
+from object import Object as Obj
+
 
 # stand alone functions
 def get_distance(object1, object2, x1, y1):
@@ -24,10 +25,9 @@ player_img = pygame.image.load("assets/werewolf.png")
 player = Obj(0, screen.get_height() / 2, player_img, False, True)
 
 # block image
-block_img_list = []
-block_img_list.append(pygame.image.load("assets/grass.png"))
-block_img_list.append(pygame.image.load("assets/block.png"))
-block_img_list.append(pygame.image.load("assets/block2.png"))
+block_img_list = [pygame.image.load("assets/grass.png"),
+                  pygame.image.load("assets/block.png"),
+                  pygame.image.load("assets/block2.png")]
 
 block_collisions = [False, True, True]
 block_list = [
@@ -37,16 +37,14 @@ block_list = [
     "1000000111000011",
     "10001100000000s1",
     "1111111111111111",
-    ]
+]
 
 
 def tile_map(tile_map_array, image, width, height, collision_list):
     tile_map_list = []
-    
     y = 0
     for column in tile_map_array:
         x = 0
-        last_is_one = False
         last_loop_count = 0
         last_number = 0
         for row in column:
@@ -116,8 +114,6 @@ while running:
     time_count += time_delta
     current_time_dt = dt.now()
     current_time_ts = dt.timestamp(current_time_dt)
-
-
 
     # screen update
     pygame.display.update()

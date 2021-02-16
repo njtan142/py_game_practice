@@ -13,6 +13,7 @@ class Camera:
         x = self.obj.x - self.follow.x
         y = self.obj.y - self.follow.y
         for obj in self.objects:
+
             obj.move(x, y, object_list)
             if obj != self.follow:
                 obj.update(screen)
