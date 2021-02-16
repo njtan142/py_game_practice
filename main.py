@@ -90,12 +90,12 @@ camera_obj = Obj(screen.get_width() / 2, screen.get_height() / 2, None)
 camera = Cam(camera_obj, object_list, player)
 
 while running:
-    # clock.tick(60)
+    # clock.tick(600)
     # input handler
     key_state = pygame.key.get_pressed()
     horizontal = key_state[pygame.K_d] - key_state[pygame.K_a]
     vertical = key_state[pygame.K_s] - key_state[pygame.K_w]
-
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -106,6 +106,14 @@ while running:
     (player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, object_list))
     # camera update
     (camera.update(object_list, screen))
+    
+    # first layer update
+    for obj in block_object_list:
+        obj.update(screen)
+
+    # second layer update
+    player.update(screen)
+
 
     # fps and time management
     last_time_dt = dt.now()
