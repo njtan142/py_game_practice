@@ -24,20 +24,23 @@ player_img = pygame.image.load("assets/werewolf.png")
 player = Obj(0, screen.get_height() / 2, player_img, False, True)
 
 # block image
-block_img_list = [0]
+block_img_list = []
+block_img_list.append(pygame.image.load("assets/grass.png"))
 block_img_list.append(pygame.image.load("assets/block.png"))
 block_img_list.append(pygame.image.load("assets/block2.png"))
+
+block_collisions = [False, True, True]
 block_list = [
-    "111111111122211",
-    "100000000000001",
-    "101110000000001",
-    "100000011100001",
-    "100011000000000",
-    "111111111111111",
+    "1111111111111111",
+    "1000000000000011",
+    "1011100000000011",
+    "1000000111000011",
+    "10001100000000s1",
+    "1111111111111111",
     ]
 
 
-def tile_map(tile_map_array, image, width, height):
+def tile_map(tile_map_array, image, width, height, collision_list):
     tile_map_list = []
     
     y = 0
@@ -47,21 +50,24 @@ def tile_map(tile_map_array, image, width, height):
         last_loop_count = 0
         last_number = 0
         for row in column:
-            if int(row) != 0:
-                print(row)
-                tile = Obj(x, y, image[int(row)], False)
-                if last_number == int(row):
-                    tile.loop += last_loop_count
-                    tile_map_list.pop()
-                tile_map_list.append(tile)
-                last_loop_count = tile.loop
+            if row == "s":
+                player.x = x
+                player.y = y
+                row = "0"
+            tile = Obj(x, y, image[int(row)], False)
+            tile.collision = collision_list[int(row)]
+            if last_number == int(row):
+                tile.loop += last_loop_count
+                tile_map_list.pop()
+            tile_map_list.append(tile)
+            last_loop_count = tile.loop
             last_number = int(row)
             x += width
         y += height
     return tile_map_list
 
 
-block_object_list = tile_map(block_list, block_img_list, 32, 32)
+block_object_list = tile_map(block_list, block_img_list, 32, 32, block_collisions)
 
 # frames counter (FPS)
 fps = 0
@@ -81,7 +87,6 @@ object_list = [player]
 for block in block_object_list:
     object_list.append(block)
 
-
 # camera
 camera_obj = Obj(screen.get_width() / 2, screen.get_height() / 2, None)
 camera = Cam(camera_obj, object_list, player)
@@ -97,7 +102,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     # background
-    screen.fill((203, 123, 123))
+    screen.fill((123, 123, 123))
     # player update
 
     (player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, object_list))
