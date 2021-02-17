@@ -7,6 +7,7 @@ from object import Object as Obj
 from animationc import animationC
 
 
+
 # stand alone functions
 def get_distance(object1, object2, x1, y1):
     x_1 = object1.x + x1 - object2.x
@@ -24,7 +25,7 @@ clock = pygame.time.Clock()
 # player
 player_img = pygame.image.load("assets/idle down1.png")
 player_idle_animation = [
-    pygame.image.load("assets/walk down1.png"),
+    pygame.image.load("assets/walk down2.png"),
     pygame.image.load("assets/walk down2.png"),
     pygame.image.load("assets/walk down3.png"),
     pygame.image.load("assets/walk down4.png")
