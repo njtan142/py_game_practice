@@ -24,15 +24,18 @@ screen = pygame.display.set_mode((640, 480))
 clock = pygame.time.Clock()
 # player
 player_img = pygame.image.load("assets/idle down1.png")
-player_idle_animation = [
-    pygame.image.load("assets/walk down2.png"),
+player_idle_down = [
+    pygame.image.load("assets/walk down1.png"),
     pygame.image.load("assets/walk down2.png"),
     pygame.image.load("assets/walk down3.png"),
     pygame.image.load("assets/walk down4.png")
 ]
+player_idle_left = [
+    pygame.image.load("")
+]
 player = Obj(0, screen.get_height() / 2, player_img, False, True)
 player_anim_controller = animationC()
-player_anim_controller.add_animation("walk down", player_idle_animation, 1)
+player_anim_controller.add_animation("walk down", player_idle_down, 1)
 player.anim_c = player_anim_controller
 
 # block image
