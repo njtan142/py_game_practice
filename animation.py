@@ -12,3 +12,4 @@ class Anim:
         screen.blit(self.image_list[round(index - 1)], (x, y))
         if self.counter >= self.duration:
             self.counter -= self.duration
+
