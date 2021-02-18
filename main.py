@@ -1,10 +1,18 @@
 from datetime import datetime as dt
-
 import pygame
-
 from camera import Camera as Cam
 from object import Object as Obj
 from animationc import animationC
+import sys
+import os
+
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 
 # stand alone functions
@@ -22,57 +30,96 @@ def get_distance(object1, object2, x1, y1):
 pygame.init()
 screen = pygame.display.set_mode((1440, 840))
 clock = pygame.time.Clock()
+# Assets
+assets = {
+    'iu1': resource_path("assets/idle up1.png"),
+    'iu2': resource_path("assets/idle up2.png"),
+    'iu3': resource_path("assets/idle up3.png"),
+    'iu4': resource_path("assets/idle up4.png"),
+    'il1': resource_path("assets/idle left1.png"),
+    'il2': resource_path("assets/idle left2.png"),
+    'il3': resource_path("assets/idle left3.png"),
+    'il4': resource_path("assets/idle left4.png"),
+    'ir1': resource_path("assets/idle right1.png"),
+    'ir2': resource_path("assets/idle right2.png"),
+    'ir3': resource_path("assets/idle right3.png"),
+    'ir4': resource_path("assets/idle right4.png"),
+    'id1': resource_path("assets/idle down1.png"),
+    'id2': resource_path("assets/idle down2.png"),
+    'id3': resource_path("assets/idle down3.png"),
+    'id4': resource_path("assets/idle down4.png"),
+    'wu1': resource_path("assets/walk up1.png"),
+    'wu2': resource_path("assets/walk up2.png"),
+    'wu3': resource_path("assets/walk up3.png"),
+    'wu4': resource_path("assets/walk up4.png"),
+    'wl1': resource_path("assets/walk left1.png"),
+    'wl2': resource_path("assets/walk left2.png"),
+    'wl3': resource_path("assets/walk left3.png"),
+    'wl4': resource_path("assets/walk left4.png"),
+    'wr1': resource_path("assets/walk right1.png"),
+    'wr2': resource_path("assets/walk right2.png"),
+    'wr3': resource_path("assets/walk right3.png"),
+    'wr4': resource_path("assets/walk right4.png"),
+    'wd1': resource_path("assets/walk down1.png"),
+    'wd2': resource_path("assets/walk down2.png"),
+    'wd3': resource_path("assets/walk down3.png"),
+    'wd4': resource_path("assets/walk down4.png"),
+    "grass": "assets/grass.png",
+    "block": "assets/block.png",
+    "block2": "assets/block2.png",
+
+}
 
 # player
-player_img = pygame.image.load("assets/idle down1.png").convert_alpha()  # player default image
+player_img = pygame.image.load(assets['id1']).convert_alpha()  # player default image
 
 player_idle_up = [  # player idle left animation image list
-    pygame.image.load("assets/idle up1.png").convert_alpha(),
-    pygame.image.load("assets/idle up2.png").convert_alpha(),
-    pygame.image.load("assets/idle up3.png").convert_alpha(),
-    pygame.image.load("assets/idle up4.png").convert_alpha(),
+    pygame.image.load(assets['iu1']).convert_alpha(),
+    pygame.image.load(assets['iu2']).convert_alpha(),
+    pygame.image.load(assets['iu3']).convert_alpha(),
+    pygame.image.load(assets['iu4']).convert_alpha(),
 ]
 player_idle_left = [  # player idle left animation image list
-    pygame.image.load("assets/idle left1.png").convert_alpha(),
-    pygame.image.load("assets/idle left2.png").convert_alpha(),
-    pygame.image.load("assets/idle left3.png").convert_alpha(),
-    pygame.image.load("assets/idle left4.png").convert_alpha(),
+    pygame.image.load(assets['il1']).convert_alpha(),
+    pygame.image.load(assets['il2']).convert_alpha(),
+    pygame.image.load(assets['il3']).convert_alpha(),
+    pygame.image.load(assets['il4']).convert_alpha(),
 ]
 player_idle_right = [  # player idle left animation image list
-    pygame.image.load("assets/idle right1.png").convert_alpha(),
-    pygame.image.load("assets/idle right2.png").convert_alpha(),
-    pygame.image.load("assets/idle right3.png").convert_alpha(),
-    pygame.image.load("assets/idle right4.png").convert_alpha(),
+    pygame.image.load(assets['ir1']).convert_alpha(),
+    pygame.image.load(assets['ir2']).convert_alpha(),
+    pygame.image.load(assets['ir3']).convert_alpha(),
+    pygame.image.load(assets['ir4']).convert_alpha(),
 ]
 player_idle_down = [  # player idle left animation image list
-    pygame.image.load("assets/idle down1.png").convert_alpha(),
-    pygame.image.load("assets/idle down2.png").convert_alpha(),
-    pygame.image.load("assets/idle down3.png").convert_alpha(),
-    pygame.image.load("assets/idle down4.png").convert_alpha()
+    pygame.image.load(assets['id1']).convert_alpha(),
+    pygame.image.load(assets['id2']).convert_alpha(),
+    pygame.image.load(assets['id3']).convert_alpha(),
+    pygame.image.load(assets['id4']).convert_alpha()
 ]
 player_walk_up = [  # player idle down animation image list
-    pygame.image.load("assets/walk up1.png").convert_alpha(),
-    pygame.image.load("assets/walk up2.png").convert_alpha(),
-    pygame.image.load("assets/walk up3.png").convert_alpha(),
-    pygame.image.load("assets/walk up4.png").convert_alpha()
+    pygame.image.load(assets['wu1']).convert_alpha(),
+    pygame.image.load(assets['wu2']).convert_alpha(),
+    pygame.image.load(assets['wu3']).convert_alpha(),
+    pygame.image.load(assets['wu4']).convert_alpha()
 ]
 player_walk_left = [  # player idle down animation image list
-    pygame.image.load("assets/walk left1.png").convert_alpha(),
-    pygame.image.load("assets/walk left2.png").convert_alpha(),
-    pygame.image.load("assets/walk left3.png").convert_alpha(),
-    pygame.image.load("assets/walk left4.png").convert_alpha()
+    pygame.image.load(assets['wl1']).convert_alpha(),
+    pygame.image.load(assets['wl2']).convert_alpha(),
+    pygame.image.load(assets['wl3']).convert_alpha(),
+    pygame.image.load(assets['wl4']).convert_alpha()
 ]
 player_walk_right = [  # player idle down animation image list
-    pygame.image.load("assets/walk right1.png").convert_alpha(),
-    pygame.image.load("assets/walk right2.png").convert_alpha(),
-    pygame.image.load("assets/walk right3.png").convert_alpha(),
-    pygame.image.load("assets/walk right4.png").convert_alpha()
+    pygame.image.load(assets['wr1']).convert_alpha(),
+    pygame.image.load(assets['wr2']).convert_alpha(),
+    pygame.image.load(assets['wr3']).convert_alpha(),
+    pygame.image.load(assets['wr4']).convert_alpha()
 ]
 player_walk_down = [  # player idle down animation image list
-    pygame.image.load("assets/walk down1.png").convert_alpha(),
-    pygame.image.load("assets/walk down2.png").convert_alpha(),
-    pygame.image.load("assets/walk down3.png").convert_alpha(),
-    pygame.image.load("assets/walk down4.png").convert_alpha()
+    pygame.image.load(assets['wd1']).convert_alpha(),
+    pygame.image.load(assets['wd2']).convert_alpha(),
+    pygame.image.load(assets['wd3']).convert_alpha(),
+    pygame.image.load(assets['wd4']).convert_alpha()
 ]
 
 player = Obj(0, screen.get_height() / 2, player_img, False, True)
@@ -81,10 +128,10 @@ player_anim_states = [
     'walk up', 'walk up', 'walk right', 'walk down'
 ]
 player_anim_controller = animationC(player_anim_states)
-player_anim_controller.add_animation("walk up", player_walk_up, 1)
-player_anim_controller.add_animation("walk left", player_walk_left, 1)
-player_anim_controller.add_animation("walk right", player_walk_right, 1)
-player_anim_controller.add_animation("walk down", player_walk_down, 1)
+player_anim_controller.add_animation("walk up", player_walk_up, 0.8)
+player_anim_controller.add_animation("walk left", player_walk_left, 0.8)
+player_anim_controller.add_animation("walk right", player_walk_right, 0.8)
+player_anim_controller.add_animation("walk down", player_walk_down, 0.8)
 player_anim_controller.add_animation("idle up", player_idle_up, 1)
 player_anim_controller.add_animation("idle left", player_idle_left, 1)
 player_anim_controller.add_animation("idle right", player_idle_right, 1)
@@ -93,9 +140,9 @@ player_anim_controller.add_animation("idle down", player_idle_down, 1)
 player.anim_c = player_anim_controller
 
 # block image
-block_img_list = [pygame.image.load("assets/grass.png").convert(),
-                  pygame.image.load("assets/block.png").convert(),
-                  pygame.image.load("assets/block2.png").convert()
+block_img_list = [pygame.image.load(assets['grass']).convert(),
+                  pygame.image.load(assets['block']).convert(),
+                  pygame.image.load(assets['block2']).convert()
                   ]
 
 # level editor s for player position
