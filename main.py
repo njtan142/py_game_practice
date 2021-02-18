@@ -37,6 +37,13 @@ game_scene = Scene(Game(pygame, screen))
 scene_manager.scenes["game_scene"] = game_scene
 running = True
 is_running = False
+current_time_dt = dt.now()
+current_time_ts = dt.timestamp(current_time_dt)
+last_time_dt = dt.now()
+last_time_ts = dt.timestamp(last_time_dt)
+time_count = 0
+time_delta = 0.016
+running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -45,5 +52,13 @@ while running:
     key_input = pygame.key.get_pressed()
     if key_input[pygame.K_RETURN] == 1:
         scene_manager.active_scene = scene_manager.scenes["game_scene"]
+    if key_input[pygame.K_ESCAPE] == 1:
+        scene_manager.active_scene = None
     if scene_manager.active_scene is not None:
-        scene_manager.active_scene.run()
+        scene_manager.active_scene.run(time_delta)
+    last_time_dt = dt.now()
+    last_time_ts = dt.timestamp(last_time_dt)
+    time_delta = last_time_ts - current_time_ts
+    time_count += time_delta
+    current_time_dt = dt.now()
+    current_time_ts = dt.timestamp(current_time_dt)

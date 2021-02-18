@@ -195,14 +195,7 @@ class Game:
         # frames counter (FPS)
         self.fps = 0
 
-        # time
-        self.current_time_dt = dt.now()
-        self.current_time_ts = dt.timestamp(self.current_time_dt)
-        self.last_time_dt = dt.now()
-        self.last_time_ts = dt.timestamp(self.last_time_dt)
         self.time_count = 0
-        self.time_delta = 1
-        self.running = True
 
         # object list
         self.object_list = [self.player]
@@ -213,7 +206,7 @@ class Game:
         camera_obj = Obj(self.screen.get_width() / 2, self.screen.get_height() / 2, None)
         self.camera = Cam(camera_obj, self.object_list, self.player)
 
-    def run(self):
+    def run(self, time_delta):
         # frames per second handler(optional)
         # clock.tick(60)
 
@@ -226,54 +219,43 @@ class Game:
         self.screen.fill((0, 0, 0))
         # player update
 
-        (self.player.move(horizontal * 100 * self.time_delta, vertical * 100 * self.time_delta, self.object_list))
+        self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
         # camera update
-        (self.camera.update(self.object_list, self.screen))
-
+        self.camera.update(self.object_list, self.screen)
         # first layer update
         for obj in self.block_object_list:
             obj.update(self.screen)
-
         # player update
         # animation logics
         if vertical == 1:
             self.player.anim_c.set_state('walk down')
-            self.player.anim_c.play_animation("walk down", self.screen, self.time_delta, self.player.x, self.player.y)
+            self.player.anim_c.play_animation("walk down", self.screen, time_delta, self.player.x, self.player.y)
         elif vertical == -1:
             self.player.anim_c.set_state('walk up')
-            self.player.anim_c.play_animation("walk up", self.screen, self.time_delta, self.player.x, self.player.y)
+            self.player.anim_c.play_animation("walk up", self.screen, time_delta, self.player.x, self.player.y)
         elif horizontal == 1:
             self.player.anim_c.set_state('walk right')
-            self.player.anim_c.play_animation("walk right", self.screen, self.time_delta, self.player.x, self.player.y)
+            self.player.anim_c.play_animation("walk right", self.screen, time_delta, self.player.x, self.player.y)
         elif horizontal == -1:
             self.player.anim_c.set_state('walk left')
-            self.player.anim_c.play_animation("walk left", self.screen, self.time_delta, self.player.x, self.player.y)
+            self.player.anim_c.play_animation("walk left", self.screen, time_delta, self.player.x, self.player.y)
 
         if vertical == 0 and horizontal == 0:
             player_state = self.player.anim_c.get_state()
             if 'down' in player_state:
-                self.player.anim_c.play_animation("idle down", self.screen, self.time_delta, self.player.x,
+                self.player.anim_c.play_animation("idle down", self.screen, time_delta, self.player.x,
                                                   self.player.y)
             if 'up' in player_state:
-                self.player.anim_c.play_animation("idle up", self.screen, self.time_delta, self.player.x, self.player.y)
+                self.player.anim_c.play_animation("idle up", self.screen, time_delta, self.player.x, self.player.y)
             if 'left' in player_state:
-                self.player.anim_c.play_animation("idle left", self.screen, self.time_delta, self.player.x,
+                self.player.anim_c.play_animation("idle left", self.screen, time_delta, self.player.x,
                                                   self.player.y)
             if 'right' in player_state:
-                self.player.anim_c.play_animation("idle right", self.screen, self.time_delta, self.player.x,
+                self.player.anim_c.play_animation("idle right", self.screen, time_delta, self.player.x,
                                                   self.player.y)
-
-        # fps and time management
-        self.last_time_dt = dt.now()
-        self.last_time_ts = dt.timestamp(self.last_time_dt)
-        self.time_delta = self.last_time_ts - self.current_time_ts
-        self.time_count += self.time_delta
-        self.current_time_dt = dt.now()
-        self.current_time_ts = dt.timestamp(self.current_time_dt)
 
         # screen update
         self.pygame.display.update()
-
         self.fps += 1
         if self.time_count >= 1:
             print(self.fps)
