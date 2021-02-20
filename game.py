@@ -1,7 +1,6 @@
-from datetime import datetime as dt
-from camera import Camera as Cam
-from object import Object as Obj
-from animationc import animationC
+from GameDevelopment.py_game_practice.Scripts.camera import Camera as Cam
+from GameDevelopment.py_game_practice.Scripts.object import Object as Obj
+from GameDevelopment.py_game_practice.Scripts.animationc import animationC
 import sys
 import os
 
@@ -221,7 +220,7 @@ class Game:
 
         self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
         # camera update
-        self.camera.update(self.object_list, self.screen)
+        self.camera.update(self.object_list)
         # first layer update
         for obj in self.block_object_list:
             obj.update(self.screen)
