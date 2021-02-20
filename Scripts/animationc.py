@@ -1,5 +1,5 @@
-from GameDevelopment.py_game_practice.Scripts.animation import Anim
-from GameDevelopment.py_game_practice.Scripts.states import State
+from animation import Anim
+from states import State
 
 
 class animationC:

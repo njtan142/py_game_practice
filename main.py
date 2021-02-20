@@ -1,8 +1,8 @@
 from datetime import datetime as dt
 import pygame
-from GameDevelopment.py_game_practice.game import Game
-from GameDevelopment.py_game_practice.Scripts.scene import Scene
-from GameDevelopment.py_game_practice.Scripts.scenemanager import SceneManager
+from game import Game
+from Scripts.scene import Scene
+from Scripts.scenemanager import SceneManager
 import sys
 import os
 

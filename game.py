@@ -1,6 +1,6 @@
-from GameDevelopment.py_game_practice.Scripts.camera import Camera as Cam
-from GameDevelopment.py_game_practice.Scripts.object import Object as Obj
-from GameDevelopment.py_game_practice.Scripts.animationc import animationC
+from Scripts.camera import Camera as Cam
+from Scripts.object import Object as Obj
+from Scripts.animationc import animationC
 import sys
 import os
 
@@ -190,7 +190,6 @@ class Game:
         ]
         self.block_object_list = tile_map(self.block_list, self.block_img_list, 32, 32, self.block_collisions)
         print(len(self.block_object_list))
-
         # frames counter (FPS)
         self.fps = 0
 
