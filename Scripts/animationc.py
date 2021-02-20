@@ -1,5 +1,5 @@
-from animation import Anim
-from states import State
+from Scripts.animation import Anim
+from Scripts.states import State
 
 
 class animationC:

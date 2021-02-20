@@ -1,6 +1,8 @@
 from Scripts.camera import Camera as Cam
 from Scripts.object import Object as Obj
 from Scripts.animationc import animationC
+from Scripts.level import Level
+from Scripts.levelmanager import LevelManager
 import sys
 import os
 
@@ -22,6 +24,12 @@ def get_distance(object1, object2, x1, y1):
     result = x_1 + y_1
     result = result ** 0.5
     return result
+
+
+# assets
+
+# levels
+# level 1
 
 
 class Game:
@@ -188,7 +196,24 @@ class Game:
             "1111111111111111",
 
         ]
-        self.block_object_list = tile_map(self.block_list, self.block_img_list, 32, 32, self.block_collisions)
+
+        # levels
+        level1_layout = [
+            "1010101010101",
+
+        ]
+        level1_images = [pygame.image.load(self.assets['grass']).convert(),
+                         pygame.image.load(self.assets['block']).convert(),
+                         pygame.image.load(self.assets['block2']).convert()
+                         ]
+        level1_collisions = [False, True]
+        level1 = Level(level1_layout, level1_images, level1_collisions, self.player)
+        level = Level(self.block_list, self.block_img_list, self.block_collisions, self.player)
+        self.levels = LevelManager()
+        self.levels.levels["level1"] = level
+        self.levels.levels["level2"] = level1
+        self.levels.activeLevel = self.levels.levels["level1"]
+        self.block_object_list = self.levels.activeLevel.objects
         print(len(self.block_object_list))
         # frames counter (FPS)
         self.fps = 0
@@ -203,6 +228,7 @@ class Game:
         # camera
         camera_obj = Obj(self.screen.get_width() / 2, self.screen.get_height() / 2, None)
         self.camera = Cam(camera_obj, self.object_list, self.player)
+        self.rel = True
 
     def run(self, time_delta):
         # frames per second handler(optional)
@@ -255,7 +281,17 @@ class Game:
         # screen update
         self.pygame.display.update()
         self.fps += 1
+        self.time_count += time_delta
         if self.time_count >= 1:
             print(self.fps)
             self.fps = 0
             self.time_count -= 1
+
+    def setLevel(self, level):
+        if self.levels.activeLevel != self.levels.levels["level2"]:
+            print("hey")
+            self.levels.activeLevel = self.levels.levels[level]
+            self.block_object_list = self.levels.activeLevel.objects
+            self.object_list = [self.player]
+            for block in self.block_object_list:
+                self.object_list.append(block)
