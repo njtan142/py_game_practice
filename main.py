@@ -1,9 +1,6 @@
 from datetime import datetime as dt
 import pygame
-from camera import Camera as Cam
-from object import Object as Obj
-from animationc import animationC
-from game import Game
+from GameDevelopment.py_game_practice.game import Game
 from scene import Scene
 from scenemanager import SceneManager
 import sys

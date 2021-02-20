@@ -10,7 +10,7 @@ def resource_path(relative_path):
     try:
         base_path = sys._MEIPASS
     except Exception:
-        base_path = os.path.abspath(".")
+        base_path = os.path.abspath("")
     return os.path.join(base_path, relative_path)
 
 
@@ -72,7 +72,7 @@ class Game:
         }
         # player
 
-        self.player_img = pygame.image.load(self.assets['id1']).convert_alpha()
+        self.player_img = pygame.image.load(self.assets["iu1"]).convert_alpha()
         self.screen = screen
         self.player_anim_states = [
             'idle up', 'idle left', 'idle right', 'idle down',
