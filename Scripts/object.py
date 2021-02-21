@@ -93,3 +93,12 @@ class Object:
         if self.collision:
             self.x = self.rect.x
             self.y = self.rect.y
+
+    def check_collision(self, walls):
+        for obj in walls:
+            if obj == self:
+                continue
+            if obj.collision:
+                if self.rect.colliderect(obj.rect):
+                    return True
+        return False

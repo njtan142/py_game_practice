@@ -28,9 +28,13 @@ def tile_map(tile_map_array, image, width, height, collision_list, player):
 
 
 class Level:
-    def __init__(self, layout, images, collisions, player):
+    def __init__(self, name, layout, images, collisions, player):
+        self.name = name
         self.layout = layout
         self.images = images
         self.collisions = collisions
         self.player = player
         self.objects = tile_map(self.layout, self.images, 32, 32, self.collisions, self.player)
+
+    def get_objects(self):
+        return tile_map(self.layout, self.images, 32, 32, self.collisions, self.player)

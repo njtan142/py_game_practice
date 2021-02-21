@@ -40,17 +40,24 @@ last_time_dt = dt.now()
 last_time_ts = dt.timestamp(last_time_dt)
 time_count = 0
 time_delta = 0.016
+is_one = False
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                is_one = True
+                scene_manager.active_scene = scene_manager.scenes["game_scene"]
 
     key_input = pygame.key.get_pressed()
-    if key_input[pygame.K_RETURN] == 1:
-        scene_manager.active_scene = scene_manager.scenes["game_scene"]
+
+
+
     if key_input[pygame.K_ESCAPE] == 1:
         scene_manager.active_scene = None
+
     if scene_manager.active_scene is not None:
         scene_manager.active_scene.run(time_delta)
     last_time_dt = dt.now()

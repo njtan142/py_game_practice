@@ -14,8 +14,8 @@ def resource_path(relative_path):
         base_path = os.path.abspath("")
     return os.path.join(base_path, relative_path)
 
-def get_layout():
-    level1 = open(resource_path('Levels/level0.txt'), 'r')
+def get_layout(path):
+    level1 = open(resource_path(path), 'r')
     string = level1.read()
     layout = string.split('\n')
     level1.close()
@@ -162,13 +162,13 @@ class Game:
                                pygame.image.load(self.assets['block2']).convert()
                                ]
         self.block_collisions = [False, True, True]
-        self.block_list = get_layout()
+        self.block_list = get_layout('Levels/level0.txt')
 
-        level = Level(self.block_list, self.block_img_list, self.block_collisions, self.player)
         self.levels = LevelManager()
-        self.levels.levels["level0"] = level
-        self.levels.activeLevel = self.levels.levels["level0"]
-        self.block_object_list = self.levels.activeLevel.objects
+        self.levels.levels_dict["level0"] = Level('level0', get_layout('Levels/level0.txt'), self.block_img_list, self.block_collisions, self.player)
+        self.levels.levels_dict["level1"] = Level('level1', get_layout('Levels/level1.txt'), self.block_img_list, self.block_collisions, self.player)
+        self.levels.active_level = self.levels.levels_dict["level1"]
+        self.block_object_list = self.levels.active_level.objects
         print(len(self.block_object_list))
         # frames counter (FPS)
         self.fps = 0
@@ -200,10 +200,12 @@ class Game:
 
         self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
         # camera update
+
         self.camera.update(self.object_list)
         # first layer update
         for obj in self.block_object_list:
             obj.update(self.screen)
+
         # player update
         # animation logics
         if vertical == 1:
@@ -242,13 +244,6 @@ class Game:
             self.fps = 0
             self.time_count -= 1
 
-    def setLevel(self, level):
-        if self.levels.activeLevel != self.levels.levels["level2"]:
-            print("hey")
-            self.levels.activeLevel = self.levels.levels[level]
-            self.block_object_list = self.levels.activeLevel.objects
-            self.object_list = [self.player]
-            for block in self.block_object_list:
-                self.object_list.append(block)
+
 
 
