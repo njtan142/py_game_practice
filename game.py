@@ -14,7 +14,12 @@ def resource_path(relative_path):
         base_path = os.path.abspath("")
     return os.path.join(base_path, relative_path)
 
-
+def get_layout():
+    level1 = open(resource_path('Levels/level0.txt'), 'r')
+    string = level1.read()
+    layout = string.split('\n')
+    level1.close()
+    return layout
 # stand alone functions
 def get_distance(object1, object2, x1, y1):
     x_1 = object1.x + x1 - object2.x
@@ -151,68 +156,18 @@ class Game:
         # level editor s for player position
 
         # tile map creation
-        def tile_map(tile_map_array, image, width, height, collision_list):
-            tile_map_list = []
-            y = 0
-            for column in tile_map_array:
-                x = 0
-                last_loop_count = 0
-                last_number = 0
-                for row in column:
-                    if row == "s":
-                        self.player.x = x
-                        self.player.y = y
-                        row = "0"
-                    tile = Obj(x, y, image[int(row)], False)
-
-                    tile.collision = collision_list[int(row)]
-                    if last_number == int(row):
-                        tile.loop += last_loop_count
-                        tile_map_list.pop()
-                    tile_map_list.append(tile)
-                    last_loop_count = tile.loop
-                    last_number = int(row)
-                    x += width
-                y += height
-            return tile_map_list
 
         self.block_img_list = [pygame.image.load(self.assets['grass']).convert(),
                                pygame.image.load(self.assets['block']).convert(),
                                pygame.image.load(self.assets['block2']).convert()
                                ]
         self.block_collisions = [False, True, True]
-        self.block_list = [
-            "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
-            "100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
-            "101110000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
-            "1000000111000011",
-            "1000010000000001",
-            "1111001111111111",
-            "1000000000000001",
-            "1000100000000001",
-            "1000s10000000001",
-            "1000110000000001",
-            "1111111111111111",
-            "1111111111111111",
+        self.block_list = get_layout()
 
-        ]
-
-        # levels
-        level1_layout = [
-            "1010101010101",
-
-        ]
-        level1_images = [pygame.image.load(self.assets['grass']).convert(),
-                         pygame.image.load(self.assets['block']).convert(),
-                         pygame.image.load(self.assets['block2']).convert()
-                         ]
-        level1_collisions = [False, True]
-        level1 = Level(level1_layout, level1_images, level1_collisions, self.player)
         level = Level(self.block_list, self.block_img_list, self.block_collisions, self.player)
         self.levels = LevelManager()
-        self.levels.levels["level1"] = level
-        self.levels.levels["level2"] = level1
-        self.levels.activeLevel = self.levels.levels["level1"]
+        self.levels.levels["level0"] = level
+        self.levels.activeLevel = self.levels.levels["level0"]
         self.block_object_list = self.levels.activeLevel.objects
         print(len(self.block_object_list))
         # frames counter (FPS)
@@ -295,3 +250,5 @@ class Game:
             self.object_list = [self.player]
             for block in self.block_object_list:
                 self.object_list.append(block)
+
+
