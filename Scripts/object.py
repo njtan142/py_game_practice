@@ -4,7 +4,7 @@ import math
 
 class Object:
 
-    def __init__(self, x, y, image, centered=False, is_player=False):
+    def __init__(self, x, y, image, centered=False, is_player=False, layer=0):
         self.anim_c = None
         self.collision = True
         self.loop = 1
@@ -28,6 +28,7 @@ class Object:
             self.rect = pygame.rect.Rect(self.x, self.y, image.get_width(), image.get_height())
         if not self.collision:
             self.rect = None
+        self.layer = layer
 
     def update(self, screen):
         x = self.x
@@ -94,6 +95,9 @@ class Object:
             self.x = self.rect.x
             self.y = self.rect.y
 
+        
+        
+        
     def check_collision(self, walls):
         for obj in walls:
             if obj == self:

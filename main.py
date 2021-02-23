@@ -28,7 +28,7 @@ def get_distance(object1, object2, x1, y1):
 
 # pygame initialization
 pygame.init()
-screen = pygame.display.set_mode((1440, 800))
+screen = pygame.display.set_mode((640, 480))
 scene_manager = SceneManager()
 game_scene = Scene(Game(pygame, screen))
 scene_manager.scenes["game_scene"] = game_scene

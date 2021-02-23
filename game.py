@@ -3,6 +3,7 @@ from Scripts.object import Object as Obj
 from Scripts.animationc import animationC
 from Scripts.level import Level
 from Scripts.levelmanager import LevelManager
+from Scripts.renderer import Renderer
 import sys
 import os
 
@@ -148,7 +149,7 @@ class Game:
         ]
         player_anim_controller.add_animation("idle down", self.player_idle_down, 1)
 
-        self.player = Obj(0, self.screen.get_height() / 2, self.player_img, False, True)
+        self.player = Obj(0, self.screen.get_height() / 2, self.player_img, False, True, 1)
         self.player.anim_c = player_anim_controller
 
         # block image
@@ -169,7 +170,7 @@ class Game:
         self.levels.levels_dict["level1"] = Level('level1', get_layout('Levels/level1.txt'), self.block_img_list, self.block_collisions, self.player)
         self.levels.active_level = self.levels.levels_dict["level1"]
         self.block_object_list = self.levels.active_level.objects
-        print(len(self.block_object_list))
+        
         # frames counter (FPS)
         self.fps = 0
 
@@ -184,6 +185,11 @@ class Game:
         camera_obj = Obj(self.screen.get_width() / 2, self.screen.get_height() / 2, None)
         self.camera = Cam(camera_obj, self.object_list, self.player)
         self.rel = True
+        
+        #layer rendering
+        self.renderer = Renderer()
+        self.renderer.add(self.object_list)
+        
 
     def run(self, time_delta):
         # frames per second handler(optional)
@@ -203,37 +209,33 @@ class Game:
 
         self.camera.update(self.object_list)
         # first layer update
-        for obj in self.block_object_list:
-            obj.update(self.screen)
+        self.renderer.render(self.screen)
 
         # player update
         # animation logics
         if vertical == 1:
             self.player.anim_c.set_state('walk down')
-            self.player.anim_c.play_animation("walk down", self.screen, time_delta, self.player.x, self.player.y)
+            self.player.anim_c.play_animation("walk down", self.screen, time_delta, self.player)
         elif vertical == -1:
             self.player.anim_c.set_state('walk up')
-            self.player.anim_c.play_animation("walk up", self.screen, time_delta, self.player.x, self.player.y)
+            self.player.anim_c.play_animation("walk up", self.screen, time_delta, self.player)
         elif horizontal == 1:
             self.player.anim_c.set_state('walk right')
-            self.player.anim_c.play_animation("walk right", self.screen, time_delta, self.player.x, self.player.y)
+            self.player.anim_c.play_animation("walk right", self.screen, time_delta, self.player)
         elif horizontal == -1:
             self.player.anim_c.set_state('walk left')
-            self.player.anim_c.play_animation("walk left", self.screen, time_delta, self.player.x, self.player.y)
+            self.player.anim_c.play_animation("walk left", self.screen, time_delta, self.player)
 
         if vertical == 0 and horizontal == 0:
             player_state = self.player.anim_c.get_state()
             if 'down' in player_state:
-                self.player.anim_c.play_animation("idle down", self.screen, time_delta, self.player.x,
-                                                  self.player.y)
+                self.player.anim_c.play_animation("idle down", self.screen, time_delta, self.player)
             if 'up' in player_state:
-                self.player.anim_c.play_animation("idle up", self.screen, time_delta, self.player.x, self.player.y)
+                self.player.anim_c.play_animation("idle up", self.screen, time_delta, self.player)
             if 'left' in player_state:
-                self.player.anim_c.play_animation("idle left", self.screen, time_delta, self.player.x,
-                                                  self.player.y)
+                self.player.anim_c.play_animation("idle left", self.screen, time_delta, self.player)
             if 'right' in player_state:
-                self.player.anim_c.play_animation("idle right", self.screen, time_delta, self.player.x,
-                                                  self.player.y)
+                self.player.anim_c.play_animation("idle right", self.screen, time_delta, self.player)
 
         # screen update
         self.pygame.display.update()

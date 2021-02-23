@@ -12,10 +12,10 @@ class animationC:
         anim = Anim(name, image_list, duration)
         self.animation_list.append(anim)
 
-    def play_animation(self, name, screen, time_delta, x, y):
+    def play_animation(self, name, screen, time_delta, object):
         for anim in self.animation_list:
             if anim.name == name:
-                anim.play(screen, time_delta, x, y)
+                anim.play(screen, time_delta, object)
 
     def set_state(self, state):
         self.state.set_state(state)
