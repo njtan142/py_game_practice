@@ -81,6 +81,36 @@ class Game:
             "grass": "assets/grass.png",
             "block": "assets/block.png",
             "block2": "assets/block2.png",
+            "11": "assets/dungeon/11.png",
+            "12": "assets/dungeon/12.png",
+            "13": "assets/dungeon/13.png",
+            "14": "assets/dungeon/14.png",
+            "15": "assets/dungeon/15.png",
+            "21": "assets/dungeon/21.png",
+            "22": "assets/dungeon/22.png",
+            "23": "assets/dungeon/23.png",
+            "24": "assets/dungeon/24.png",
+            "25": "assets/dungeon/25.png",
+            "31": "assets/dungeon/31.png",
+            "32": "assets/dungeon/32.png",
+            "33": "assets/dungeon/33.png",
+            "34": "assets/dungeon/34.png",
+            "35": "assets/dungeon/35.png",
+            "41": "assets/dungeon/41.png",
+            "42": "assets/dungeon/42.png",
+            "43": "assets/dungeon/43.png",
+            "44": "assets/dungeon/44.png",
+            "45": "assets/dungeon/45.png",
+            "51": "assets/dungeon/51.png",
+            "52": "assets/dungeon/52.png",
+            "53": "assets/dungeon/53.png",
+            "54": "assets/dungeon/54.png",
+            "55": "assets/dungeon/55.png",
+            "61": "assets/dungeon/61.png",
+            "62": "assets/dungeon/62.png",
+            "63": "assets/dungeon/63.png",
+            "64": "assets/dungeon/64.png",
+            "65": "assets/dungeon/65.png"
 
         }
         # player
@@ -154,20 +184,54 @@ class Game:
 
         # block image
 
-        # level editor s for player position
+        # level editor s for player positio3
 
         # tile map creation
 
-        self.block_img_list = [pygame.image.load(self.assets['grass']).convert(),
-                               pygame.image.load(self.assets['block']).convert(),
-                               pygame.image.load(self.assets['block2']).convert()
+        self.block_img_list = [
+                               pygame.transform.scale(pygame.image.load(self.assets['11']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['12']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['13']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['14']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['15']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['21']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['22']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['23']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['24']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['25']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['31']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['32']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['33']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['34']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['35']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['41']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['42']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['43']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['44']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['45']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['51']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['52']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['53']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['54']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['55']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['61']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['62']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['63']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['64']).convert(), (32, 32)),
+                               pygame.transform.scale(pygame.image.load(self.assets['65']).convert(), (32, 32))
                                ]
-        self.block_collisions = [False, True, True]
+        self.block_collisions = [False, True, True, True, True,
+                                 False, False, True, False, False,
+                                 False, False, False, False, False,
+                                 False, False, True, True, True,
+                                 True, False, True, True, True,
+                                 False, False, True, False, True
+                        ]
         self.block_list = get_layout('Levels/level0.txt')
 
         self.levels = LevelManager()
-        self.levels.levels_dict["level0"] = Level('level0', get_layout('Levels/level0.txt'), self.block_img_list, self.block_collisions, self.player)
-        self.levels.levels_dict["level1"] = Level('level1', get_layout('Levels/level1.txt'), self.block_img_list, self.block_collisions, self.player)
+        self.levels.levels_dict["level0"] = Level('level0', get_layout('Levels/level0.txt'), self.block_img_list, self.block_collisions, self.player, 17)
+        self.levels.levels_dict["level1"] = Level('level1', get_layout('Levels/level1.txt'), self.block_img_list, self.block_collisions, self.player, 17)
         self.levels.active_level = self.levels.levels_dict["level1"]
         self.block_object_list = self.levels.active_level.objects
         
