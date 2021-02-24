@@ -220,18 +220,18 @@ class Game:
                                pygame.transform.scale(pygame.image.load(self.assets['64']).convert(), (32, 32)),
                                pygame.transform.scale(pygame.image.load(self.assets['65']).convert(), (32, 32))
                                ]
-        self.block_collisions = [False, True, True, True, True,
-                                 False, False, True, False, False,
+        self.block_collisions = [True, True, True, True, True,
+                                 True, True, True, True, True,
                                  False, False, False, False, False,
-                                 False, False, True, True, True,
-                                 True, False, True, True, True,
-                                 False, False, True, False, True
+                                 False, False, False, False, False,
+                                 False, False, False, False, True,
+                                 False, False, False, False, False
                         ]
         self.block_list = get_layout('Levels/level0.txt')
 
         self.levels = LevelManager()
-        self.levels.levels_dict["level0"] = Level('level0', get_layout('Levels/level0.txt'), self.block_img_list, self.block_collisions, self.player, 17)
-        self.levels.levels_dict["level1"] = Level('level1', get_layout('Levels/level1.txt'), self.block_img_list, self.block_collisions, self.player, 17)
+        self.levels.levels_dict["level0"] = Level('level0', get_layout('Levels/level0.txt'), self.block_img_list, self.block_collisions, self.player, 23)
+        self.levels.levels_dict["level1"] = Level('level1', get_layout('Levels/level1.txt'), self.block_img_list, self.block_collisions, self.player, 23)
         self.levels.active_level = self.levels.levels_dict["level1"]
         self.block_object_list = self.levels.active_level.objects
         

@@ -10,6 +10,8 @@ class Object:
         self.loop = 1
         self.is_player = is_player
         self.image = image
+        self.offsetx = 0
+        self.offsety = 0
         self.float_x = 0
         self.float_y = 0
         self.visible = True
@@ -34,12 +36,14 @@ class Object:
         x = self.x
         width = 0
         for i in range(self.loop):
-            screen.blit(self.image, (x, self.y))
+            screen.blit(self.image, (x + self.offsetx, self.y + self.offsety))
             x -= self.image.get_width()
             width += self.image.get_width()
         if self.collision:
             self.rect.x = x + self.image.get_width()
             self.rect.width = width
+        self.offsetx = 0
+        self.offsety = 0
 
     def move(self, x, y, walls=None):
         if not self.is_player:
