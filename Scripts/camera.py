@@ -8,6 +8,7 @@ class Camera:
     def update(self, object_list):
         x = self.obj.x - self.follow.x
         y = self.obj.y - self.follow.y
+        
         if self.objects != object_list:
             self.objects = object_list
         for obj in self.objects:

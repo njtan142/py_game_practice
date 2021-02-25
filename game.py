@@ -147,7 +147,6 @@ class Game:
         }
         # player
 
-        self.player_img = pygame.image.load(self.assets["iu1"]).convert_alpha()
         self.screen = screen
         self.player_anim_states = [
             'idle up', 'idle left', 'idle right', 'idle down',
@@ -211,7 +210,7 @@ class Game:
         ]
         player_anim_controller.add_animation("idle down", self.player_idle_down, 1)
 
-        self.player = Obj(0, self.screen.get_height() / 2, self.player_img, False, True, 1)
+        self.player = Obj(0, 0, pygame.image.load(self.assets["iu1"]).convert_alpha(), True, 1)
         self.player.anim_c = player_anim_controller
 
         # block image
@@ -264,7 +263,8 @@ class Game:
         self.levels = LevelManager()
         self.levels.levels_dict["level0"] = Level('level0', get_layout('Levels/level0.txt'), self.block_img_list, self.block_collisions, self.player, 23)
         self.levels.levels_dict["level1"] = Level('level1', get_layout('Levels/level1.txt'), self.block_img_list, self.block_collisions, self.player, 23)
-        self.levels.active_level = self.levels.levels_dict["level1"]
+        
+        self.levels.active_level = self.levels.levels_dict["level0"]
         self.block_object_list = self.levels.active_level.objects
         
         # frames counter (FPS)
@@ -280,7 +280,6 @@ class Game:
         # camera
         camera_obj = Obj(self.screen.get_width() / 2, self.screen.get_height() / 2, None)
         self.camera = Cam(camera_obj, self.object_list, self.player)
-        self.rel = True
         
         #layer rendering
         self.renderer = Renderer()
@@ -298,8 +297,6 @@ class Game:
 
         # background
         self.screen.fill((0, 0, 0))
-        # player update
-
 
 
         # player update
@@ -327,6 +324,8 @@ class Game:
                 self.player.anim_c.play_animation("idle left", self.screen, time_delta, self.player, 0, -4)
             if 'right' in player_state:
                 self.player.anim_c.play_animation("idle right", self.screen, time_delta, self.player, -2, -6)
+                
+        
 
         self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
         # camera update

@@ -9,10 +9,12 @@ def tile_map(tile_map_array, image, width, height, collision_list, player, spawn
         last_loop_count = 0
         last_number = 0
         for row in column.split(","):
+            
             if row == "s":
                 player.x = x
                 player.y = y
                 row = str(spawn_block)
+                
             tile = Obj(x, y, image[int(row)-1], False)
 
             tile.collision = collision_list[int(row)-1]
