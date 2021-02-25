@@ -78,6 +78,22 @@ class Game:
             'wd2': resource_path("assets/walk down2.png"),
             'wd3': resource_path("assets/walk down3.png"),
             'wd4': resource_path("assets/walk down4.png"),
+            'ss_iu1': resource_path("assets/ss/idle_01_01.png"),
+            'ss_iu2': resource_path("assets/ss/idle_01_02.png"),
+            'ss_iu3': resource_path("assets/ss/idle_01_03.png"),
+            'ss_iu4': resource_path("assets/ss/idle_01_04.png"),
+            'ss_il1': resource_path("assets/ss/idle_02_01.png"),
+            'ss_il2': resource_path("assets/ss/idle_02_02.png"),
+            'ss_il3': resource_path("assets/ss/idle_02_03.png"),
+            'ss_il4': resource_path("assets/ss/idle_02_04.png"),
+            'ss_ir1': resource_path("assets/ss/idle_03_01.png"),
+            'ss_ir2': resource_path("assets/ss/idle_03_02.png"),
+            'ss_ir3': resource_path("assets/ss/idle_03_03.png"),
+            'ss_ir4': resource_path("assets/ss/idle_03_04.png"),
+            'ss_id1': resource_path("assets/ss/idle_04_01.png"),
+            'ss_id2': resource_path("assets/ss/idle_04_02.png"),
+            'ss_id3': resource_path("assets/ss/idle_04_03.png"),
+            'ss_id4': resource_path("assets/ss/idle_04_04.png"),
             "grass": "assets/grass.png",
             "block": "assets/block.png",
             "block2": "assets/block2.png",
@@ -151,31 +167,31 @@ class Game:
         ]
         player_anim_controller.add_animation("walk down", self.player_walk_down, 0.8)
         self.alpha_ = [  # player idle left animation image list
-            pygame.image.load(self.assets['iu1']).convert_alpha(),
-            pygame.image.load(self.assets['iu2']).convert_alpha(),
-            pygame.image.load(self.assets['iu3']).convert_alpha(),
-            pygame.image.load(self.assets['iu4']).convert_alpha(),
+            pygame.image.load(self.assets['ss_iu1']).convert_alpha(),
+            pygame.image.load(self.assets['ss_iu2']).convert_alpha(),
+            pygame.image.load(self.assets['ss_iu3']).convert_alpha(),
+            pygame.image.load(self.assets['ss_iu4']).convert_alpha(),
         ]
         player_anim_controller.add_animation("idle up", self.alpha_, 1)
         self.player_idle_left = [  # player idle left animation image list
-            pygame.image.load(self.assets['il1']).convert_alpha(),
-            pygame.image.load(self.assets['il2']).convert_alpha(),
-            pygame.image.load(self.assets['il3']).convert_alpha(),
-            pygame.image.load(self.assets['il4']).convert_alpha(),
+            pygame.image.load(self.assets['ss_il1']).convert_alpha(),
+            pygame.image.load(self.assets['ss_il2']).convert_alpha(),
+            pygame.image.load(self.assets['ss_il3']).convert_alpha(),
+            pygame.image.load(self.assets['ss_il4']).convert_alpha(),
         ]
         player_anim_controller.add_animation("idle left", self.player_idle_left, 1)
         self.player_idle_right = [  # player idle left animation image list
-            pygame.image.load(self.assets['ir1']).convert_alpha(),
-            pygame.image.load(self.assets['ir2']).convert_alpha(),
-            pygame.image.load(self.assets['ir3']).convert_alpha(),
-            pygame.image.load(self.assets['ir4']).convert_alpha(),
+            pygame.image.load(self.assets['ss_ir1']).convert_alpha(),
+            pygame.image.load(self.assets['ss_ir2']).convert_alpha(),
+            pygame.image.load(self.assets['ss_ir3']).convert_alpha(),
+            pygame.image.load(self.assets['ss_ir4']).convert_alpha(),
         ]
         player_anim_controller.add_animation("idle right", self.player_idle_right, 1)
         self.player_idle_down = [  # player idle left animation image list
-            pygame.image.load(self.assets['id1']).convert_alpha(),
-            pygame.image.load(self.assets['id2']).convert_alpha(),
-            pygame.image.load(self.assets['id3']).convert_alpha(),
-            pygame.image.load(self.assets['id4']).convert_alpha()
+            pygame.image.load(self.assets['ss_id1']).convert_alpha(),
+            pygame.image.load(self.assets['ss_id2']).convert_alpha(),
+            pygame.image.load(self.assets['ss_id3']).convert_alpha(),
+            pygame.image.load(self.assets['ss_id4']).convert_alpha()
         ]
         player_anim_controller.add_animation("idle down", self.player_idle_down, 1)
 
@@ -268,12 +284,7 @@ class Game:
         self.screen.fill((0, 0, 0))
         # player update
 
-        self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
-        # camera update
 
-        self.camera.update(self.object_list)
-        # first layer update
-        self.renderer.render(self.screen)
 
         # player update
         # animation logics
@@ -293,14 +304,21 @@ class Game:
         if vertical == 0 and horizontal == 0:
             player_state = self.player.anim_c.get_state()
             if 'down' in player_state:
-                self.player.anim_c.play_animation("idle down", self.screen, time_delta, self.player)
+                self.player.anim_c.play_animation("idle down", self.screen, time_delta, self.player, -3, -6)
             if 'up' in player_state:
-                self.player.anim_c.play_animation("idle up", self.screen, time_delta, self.player)
+                self.player.anim_c.play_animation("idle up", self.screen, time_delta, self.player, -1, -4)
             if 'left' in player_state:
-                self.player.anim_c.play_animation("idle left", self.screen, time_delta, self.player)
+                self.player.anim_c.play_animation("idle left", self.screen, time_delta, self.player, 0, -4)
             if 'right' in player_state:
-                self.player.anim_c.play_animation("idle right", self.screen, time_delta, self.player)
+                self.player.anim_c.play_animation("idle right", self.screen, time_delta, self.player, -2, -6)
 
+        self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
+        # camera update
+
+        self.camera.update(self.object_list)
+        # first layer update
+        self.renderer.render(self.screen)
+        print(self.player.rect)
         # screen update
         self.pygame.display.update()
         self.fps += 1

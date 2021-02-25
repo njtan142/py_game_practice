@@ -24,10 +24,14 @@ class Object:
             self.x = x
             self.y = y
             self.rect = pygame.rect.Rect(x, y, image.get_width(), image.get_height())
+            self.o_w = image.get_width()
+            self.o_h = image.get_height()
         else:
             self.x = x - image.get_width() / 2
             self.y = y - image.get_height() / 2
             self.rect = pygame.rect.Rect(self.x, self.y, image.get_width(), image.get_height())
+            self.o_w = image.get_width()
+            self.o_h = image.get_height()
         if not self.collision:
             self.rect = None
         self.layer = layer
@@ -38,7 +42,7 @@ class Object:
         for i in range(self.loop):
             screen.blit(self.image, (x + self.offsetx, self.y + self.offsety))
             x -= self.image.get_width()
-            width += self.image.get_width()
+            width += self.o_w
         if self.collision:
             self.rect.x = x + self.image.get_width()
             self.rect.width = width
