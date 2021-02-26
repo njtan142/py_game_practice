@@ -110,6 +110,10 @@ class Game:
             'ss_wd2': resource_path("assets/ss/walk_04_02.png"),
             'ss_wd3': resource_path("assets/ss/walk_04_03.png"),
             'ss_wd4': resource_path("assets/ss/walk_04_04.png"),
+            'ss_au1': resource_path("assets/ss/attack_01_01.png"),
+            'ss_au2': resource_path("assets/ss/attack_01_02.png"),
+            'ss_au3': resource_path("assets/ss/attack_01_03.png"),
+            'ss_au4': resource_path("assets/ss/attack_01_04.png"),
             "grass": "assets/grass.png",
             "block": "assets/block.png",
             "block2": "assets/block2.png",
@@ -209,9 +213,19 @@ class Game:
             pygame.image.load(self.assets['ss_id4']).convert_alpha()
         ]
         player_anim_controller.add_animation("idle down", self.player_idle_down, 1)
+        
+        self.player_idle_down = [  # player idle left animation image list
+            pygame.image.load(self.assets['ss_au1']).convert_alpha(),
+            pygame.image.load(self.assets['ss_au2']).convert_alpha(),
+            pygame.image.load(self.assets['ss_au3']).convert_alpha(),
+            pygame.image.load(self.assets['ss_au4']).convert_alpha()
+        ]
+        player_anim_controller.add_animation("attack", self.player_idle_down, 0.1)
+    
 
         self.player = Obj(0, 0, pygame.image.load(self.assets["iu1"]).convert_alpha(), True, 1)
         self.player.anim_c = player_anim_controller
+        self.player.attacking = False
 
         # block image
 
@@ -287,7 +301,9 @@ class Game:
         
 
     def run(self, time_delta):
-        # frames per second handler(optional)
+        
+
+                    
         # clock.tick(60)
 
         # input handler
@@ -324,8 +340,11 @@ class Game:
                 self.player.anim_c.play_animation("idle left", self.screen, time_delta, self.player, 0, -4)
             if 'right' in player_state:
                 self.player.anim_c.play_animation("idle right", self.screen, time_delta, self.player, -2, -6)
-                
         
+        if self.player.attacking:
+            if self.player.anim_c.play_animation("attack", self.screen, time_delta, self.player, -22, 0):
+                self.player.attacking = False
+
 
         self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
         # camera update

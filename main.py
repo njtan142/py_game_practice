@@ -53,9 +53,11 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 scene_manager.active_scene = scene_manager.scenes["game_scene"]
-            
             if event.key == pygame.K_ESCAPE:
                 scene_manager.active_scene = None
+            if event.key == pygame.K_SPACE:
+                if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
+                    scene_manager.active_scene.assets.player.attacking = True
 
 
     if scene_manager.active_scene is not None:
