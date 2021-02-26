@@ -9,7 +9,7 @@ class Renderer:
             for object in objects:
                 try:
                     self.render_dict[object.layer]
-                except:
+                except KeyError:
                     self.render_dict[object.layer] = []
                     self.render_list.append(object.layer)
                 self.render_dict[object.layer].append(object)
