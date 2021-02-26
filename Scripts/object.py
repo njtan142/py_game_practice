@@ -5,6 +5,7 @@ import math
 class Object:
 
     def __init__(self, x, y, image=None, is_player=False, layer=0):
+        # core variables
         self.x = x
         self.y = y
         self.collision = True
@@ -12,11 +13,14 @@ class Object:
         self.is_player = is_player
         self.image = image
         
+        # variables used by other functons
         self.offsetx = 0
         self.offsety = 0
         
         self.float_x = 0
         self.float_y = 0
+        
+        # define the collision based on the image
         if image is None:
             self.rect = pygame.rect.Rect(x, y, 0, 0)
             self.o_w = 0
@@ -30,9 +34,12 @@ class Object:
         if not self.collision:
             self.rect = None
             
+        # for layered rendering
         self.layer = layer
 
+
     def update(self, screen):
+        # this is for chunked objects on the horizontal axis but will also work on unchunked obects
         x = self.x
         width = 0
         for i in range(self.loop):
@@ -43,12 +50,19 @@ class Object:
         if self.collision:
             self.rect.x = x + self.image.get_width()
             self.rect.width = width
+        
+        
+        # reset the offset so that it wont affect other animations
         self.offsetx = 0
         self.offsety = 0
 
+
     def move(self, x, y, walls=None):
-        if not self.is_player:
+        
+        if not self.is_player: #performance reasons
             walls = None
+        
+        # moving the objects by integers instead of float because of the way pygame.rect works
         self.float_x += x - int(x)
         self.float_y += y - int(y)
         x = int(x)

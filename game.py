@@ -110,10 +110,22 @@ class Game:
             'ss_wd2': resource_path("assets/ss/walk_04_02.png"),
             'ss_wd3': resource_path("assets/ss/walk_04_03.png"),
             'ss_wd4': resource_path("assets/ss/walk_04_04.png"),
-            'ss_au1': resource_path("assets/ss/attack_01_01.png"),
-            'ss_au2': resource_path("assets/ss/attack_01_02.png"),
-            'ss_au3': resource_path("assets/ss/attack_01_03.png"),
-            'ss_au4': resource_path("assets/ss/attack_01_04.png"),
+            'ss_au1': resource_path("assets/ss/attack up_01_01.png"),
+            'ss_au2': resource_path("assets/ss/attack up_01_02.png"),
+            'ss_au3': resource_path("assets/ss/attack up_01_03.png"),
+            'ss_au4': resource_path("assets/ss/attack up_01_04.png"),
+            'ss_al1': resource_path("assets/ss/attack_01_01.png"),
+            'ss_al2': resource_path("assets/ss/attack_01_02.png"),
+            'ss_al3': resource_path("assets/ss/attack_01_03.png"),
+            'ss_al4': resource_path("assets/ss/attack_01_04.png"),
+            'ss_ar1': resource_path("assets/ss/attack right_01_04.png"),
+            'ss_ar2': resource_path("assets/ss/attack right_01_03.png"),
+            'ss_ar3': resource_path("assets/ss/attack right_01_02.png"),
+            'ss_ar4': resource_path("assets/ss/attack right_01_01.png"),
+            'ss_ad1': resource_path("assets/ss/attack down_01_04.png"),
+            'ss_ad2': resource_path("assets/ss/attack down_01_03.png"),
+            'ss_ad3': resource_path("assets/ss/attack down_01_02.png"),
+            'ss_ad4': resource_path("assets/ss/attack down_01_01.png"),
             "grass": "assets/grass.png",
             "block": "assets/block.png",
             "block2": "assets/block2.png",
@@ -163,28 +175,28 @@ class Game:
             pygame.image.load(self.assets['ss_wu3']).convert_alpha(),
             pygame.image.load(self.assets['ss_wu4']).convert_alpha()
         ]
-        player_anim_controller.add_animation("walk up", self.player_walk_up, 0.8)
+        player_anim_controller.add_animation("walk up", self.player_walk_up, 0.5)
         self.player_walk_left = [  # player idle down animation image list
             pygame.image.load(self.assets['ss_wl1']).convert_alpha(),
             pygame.image.load(self.assets['ss_wl2']).convert_alpha(),
             pygame.image.load(self.assets['ss_wl3']).convert_alpha(),
             pygame.image.load(self.assets['ss_wl4']).convert_alpha()
         ]
-        player_anim_controller.add_animation("walk left", self.player_walk_left, 0.8)
+        player_anim_controller.add_animation("walk left", self.player_walk_left, 0.5)
         self.player_walk_right = [  # player idle down animation image list
             pygame.image.load(self.assets['ss_wr1']).convert_alpha(),
             pygame.image.load(self.assets['ss_wr2']).convert_alpha(),
             pygame.image.load(self.assets['ss_wr3']).convert_alpha(),
             pygame.image.load(self.assets['ss_wr4']).convert_alpha()
         ]
-        player_anim_controller.add_animation("walk right", self.player_walk_right, 0.8)
+        player_anim_controller.add_animation("walk right", self.player_walk_right, 0.5)
         self.player_walk_down = [  # player idle down animation image list
             pygame.image.load(self.assets['ss_wd1']).convert_alpha(),
             pygame.image.load(self.assets['ss_wd2']).convert_alpha(),
             pygame.image.load(self.assets['ss_wd3']).convert_alpha(),
             pygame.image.load(self.assets['ss_wd4']).convert_alpha()
         ]
-        player_anim_controller.add_animation("walk down", self.player_walk_down, 0.8)
+        player_anim_controller.add_animation("walk down", self.player_walk_down, 0.5)
         self.alpha_ = [  # player idle left animation image list
             pygame.image.load(self.assets['ss_iu1']).convert_alpha(),
             pygame.image.load(self.assets['ss_iu2']).convert_alpha(),
@@ -214,13 +226,37 @@ class Game:
         ]
         player_anim_controller.add_animation("idle down", self.player_idle_down, 1)
         
-        self.player_idle_down = [  # player idle left animation image list
+        self.player_idle_down = [  # player attack up animation image list
             pygame.image.load(self.assets['ss_au1']).convert_alpha(),
             pygame.image.load(self.assets['ss_au2']).convert_alpha(),
             pygame.image.load(self.assets['ss_au3']).convert_alpha(),
             pygame.image.load(self.assets['ss_au4']).convert_alpha()
         ]
-        player_anim_controller.add_animation("attack", self.player_idle_down, 0.1)
+        player_anim_controller.add_animation("attack up", self.player_idle_down, 0.1)
+        
+        self.player_idle_down = [  # player attack left animation image list
+            pygame.image.load(self.assets['ss_al1']).convert_alpha(),
+            pygame.image.load(self.assets['ss_al2']).convert_alpha(),
+            pygame.image.load(self.assets['ss_al3']).convert_alpha(),
+            pygame.image.load(self.assets['ss_al4']).convert_alpha()
+        ]
+        player_anim_controller.add_animation("attack left", self.player_idle_down, 0.1)
+    
+        self.player_idle_down = [  # player attack right animation image list
+            pygame.image.load(self.assets['ss_ar1']).convert_alpha(),
+            pygame.image.load(self.assets['ss_ar2']).convert_alpha(),
+            pygame.image.load(self.assets['ss_ar3']).convert_alpha(),
+            pygame.image.load(self.assets['ss_ar4']).convert_alpha()
+        ]
+        player_anim_controller.add_animation("attack right", self.player_idle_down, 0.1)
+        
+        self.player_idle_down = [  # player attack right animation image list
+            pygame.image.load(self.assets['ss_ad1']).convert_alpha(),
+            pygame.image.load(self.assets['ss_ad2']).convert_alpha(),
+            pygame.image.load(self.assets['ss_ad3']).convert_alpha(),
+            pygame.image.load(self.assets['ss_ad4']).convert_alpha()
+        ]
+        player_anim_controller.add_animation("attack down", self.player_idle_down, 0.1)
     
 
         self.player = Obj(0, 0, pygame.image.load(self.assets["iu1"]).convert_alpha(), True, 1)
@@ -329,9 +365,10 @@ class Game:
         elif horizontal == -1:
             self.player.anim_c.set_state('walk left')
             self.player.anim_c.play_animation("walk left", self.screen, time_delta, self.player, -2, -6)
-
+        
+        
+        player_state = self.player.anim_c.get_state()
         if vertical == 0 and horizontal == 0:
-            player_state = self.player.anim_c.get_state()
             if 'down' in player_state:
                 self.player.anim_c.play_animation("idle down", self.screen, time_delta, self.player, -3, -6)
             if 'up' in player_state:
@@ -342,10 +379,20 @@ class Game:
                 self.player.anim_c.play_animation("idle right", self.screen, time_delta, self.player, -2, -6)
         
         if self.player.attacking:
-            if self.player.anim_c.play_animation("attack", self.screen, time_delta, self.player, -22, 0):
-                self.player.attacking = False
-
-
+            if 'down' in player_state:
+                if self.player.anim_c.play_animation("attack down", self.screen, time_delta, self.player, -22, 0):
+                    self.player.attacking = False
+            if 'up' in player_state:
+                if self.player.anim_c.play_animation("attack up", self.screen, time_delta, self.player, -19, -10):
+                    self.player.attacking = False
+            if 'left' in player_state:
+                if self.player.anim_c.play_animation("attack left", self.screen, time_delta, self.player, -22, 0):
+                    self.player.attacking = False
+            if 'right' in player_state:
+                if self.player.anim_c.play_animation("attack right", self.screen, time_delta, self.player, -12, -1):
+                    self.player.attacking = False
+            
+ 
         self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
         # camera update
 

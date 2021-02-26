@@ -33,7 +33,7 @@ scene_manager = SceneManager()
 game_scene = Scene(Game(pygame, screen))
 scene_manager.scenes["game_scene"] = game_scene
 
-
+clock = pygame.time.Clock()
 
 
 current_time_dt = dt.now()
@@ -46,7 +46,9 @@ time_scale = 1
 
 running = True
 timescale = 1
+loop = 0
 while running:
+    # clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -63,7 +65,8 @@ while running:
     if scene_manager.active_scene is not None:
         scene_manager.active_scene.run(time_delta * time_scale)
         
-        
+    # pygame.image.save(screen, "record/" + str(loop) + ".jpeg")
+    loop += 1
     last_time_dt = dt.now()
     last_time_ts = dt.timestamp(last_time_dt)
     time_delta = last_time_ts - current_time_ts

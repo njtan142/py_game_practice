@@ -37,6 +37,3 @@ class Level:
         self.collisions = collisions
         self.player = player
         self.objects = tile_map(self.layout, self.images, 32, 32, self.collisions, self.player, spawn_block)
-
-    def get_objects(self):
-        return tile_map(self.layout, self.images, 32, 32, self.collisions, self.player)
