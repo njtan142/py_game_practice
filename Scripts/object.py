@@ -1,10 +1,13 @@
 import pygame
 import math
+from Scripts.status import Stats
+from Scripts.healthbar import HealthBar
 
 
 class Object:
 
-    def __init__(self, x, y, image=None, is_player=False, layer=0):
+    def __init__(self, x, y, image=None, is_player=False, layer=0, entity = False):
+        self.entity = entity
         # core variables
         self.x = x
         self.y = y
@@ -36,9 +39,16 @@ class Object:
             
         # for layered rendering
         self.layer = layer
+        
+        # healthbar and status if it is an entity
+        self.status = Stats()
+        self.health_bar = HealthBar(self.status)
 
 
     def update(self, screen):
+        if self.entity:
+            if self.status.health <= 0:
+                return
         # this is for chunked objects on the horizontal axis but will also work on unchunked obects
         x = self.x
         width = 0
@@ -50,7 +60,9 @@ class Object:
         if self.collision:
             self.rect.x = x + self.image.get_width()
             self.rect.width = width
-        
+            
+        if self.entity:
+            self.health_bar.show_healthbar(screen, self.pygame, (self.x, self.y), (width,0))
         
         # reset the offset so that it wont affect other animations
         self.offsetx = 0
@@ -58,7 +70,9 @@ class Object:
 
 
     def move(self, x, y, walls=None):
-        
+        if self.entity:
+            if self.status.health <= 0:
+                return
         if not self.is_player: #performance reasons
             walls = None
         
@@ -89,6 +103,9 @@ class Object:
 
 
     def move_single_axis(self, dx, dy, walls):
+        if self.entity:
+            if self.status.health <= 0:
+                return
         self.x += dx
         self.y += dy
         # Move the rect
@@ -101,6 +118,7 @@ class Object:
             for obj in walls:
                 if obj == self:
                     continue
+                
                 if obj.collision:
                     if self.rect.colliderect(obj.rect):
                         if dx > 0:  # Moving right; Hit the left side of the wall

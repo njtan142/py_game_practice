@@ -1,19 +1,28 @@
 from Scripts.object import Object as Obj
 
 
-def tile_map(tile_map_array, image, width, height, collision_list, player, spawn_block):
+def tile_map(tile_map_array, image, width, height, collision_list, spawns=[]):
     tile_map_list = []
+    objects = []
     y = 0
     for column in tile_map_array:
         x = 0
         last_loop_count = 0
         last_number = 0
         for row in column.split(","):
-            
-            if row == "s":
-                player.x = x
-                player.y = y
-                row = str(spawn_block)
+            for tup in spawns:
+               
+                if row == tup[0]:
+                    if tup[3]:
+                        obj = Obj(0, 0, tup[1].image, False, tup[1].layer, tup[1].entity)
+                        if obj.entity:
+                            obj.pygame = tup[1].pygame
+                        objects.append(obj)
+                    else:
+                        obj = tup[1]
+                    obj.x = x
+                    obj.y = y
+                    row = str(tup[2])
                 
             tile = Obj(x, y, image[int(row)-1], False)
 
@@ -26,14 +35,16 @@ def tile_map(tile_map_array, image, width, height, collision_list, player, spawn
             last_number = int(row)
             x += width
         y += height
+    for block in objects:
+        tile_map_list.append(block)
     return tile_map_list
 
 
 class Level:
-    def __init__(self, name, layout, images, collisions, player, spawn_block):
+    def __init__(self, name, layout, images, collisions, arguments):
         self.name = name
         self.layout = layout
         self.images = images
         self.collisions = collisions
-        self.player = player
-        self.objects = tile_map(self.layout, self.images, 32, 32, self.collisions, self.player, spawn_block)
+        self.arguments = arguments
+        self.objects = tile_map(self.layout, self.images, 32, 32, self.collisions, self.arguments)
