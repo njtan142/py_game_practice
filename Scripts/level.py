@@ -48,3 +48,7 @@ class Level:
         self.collisions = collisions
         self.arguments = arguments
         self.objects = tile_map(self.layout, self.images, 32, 32, self.collisions, self.arguments)
+        
+    def load(self):
+        return tile_map(self.layout, self.images, 32, 32, self.collisions, self.arguments)
+

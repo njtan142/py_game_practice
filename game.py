@@ -269,6 +269,7 @@ class Game:
         self.player.left_atk_rect = self.pygame.rect.Rect(self.player.x-20, self.player.y, 35, 40)
         self.player.pygame = pygame
         
+        
         self.dummy = Obj(0,0, pygame.image.load(self.assets["dummy"]).convert_alpha(), False, 1, True)
         self.dummy.pygame = pygame
         # block image
@@ -319,7 +320,18 @@ class Game:
         self.block_list = get_layout('Levels/level0.txt')
 
         self.levels = LevelManager()
-        self.levels.levels_dict["level0"] = Level('level0', get_layout('Levels/level0.txt'), self.block_img_list, self.block_collisions, [('s', self.player, 23, False), ('d', self.dummy, 20, True)])
+        self.levels.levels_dict["level0"] = Level(
+                    'level0', get_layout('Levels/level0.txt'),
+                    self.block_img_list,
+                    self.block_collisions,
+                    [('s', self.player, 23, False), ('d', self.dummy, 20, True)]
+                    )
+        self.levels.levels_dict["level1"] = Level(
+                    'level0', get_layout('Levels/level1.txt'),
+                    self.block_img_list,
+                    self.block_collisions,
+                    [('s', self.player, 23, False), ('d', self.dummy, 20, True)]
+                    )
 
         
         self.levels.active_level = self.levels.levels_dict["level0"]
@@ -345,16 +357,30 @@ class Game:
         
         # self.object_list[3] = None
         
+    def change_level(self, name):
+        self.block_object_list = self.levels.levels_dict[name].load()
         
+        # frames counter (FPS)
+        self.fps = 0
+
+        self.time_count = 0
+
+        # object list
+        self.object_list = [self.player]
+        for block in self.block_object_list:
+            self.object_list.append(block)
+        self.renderer = Renderer()
+        self.renderer.add(self.object_list)
+
         
 
     def run(self, time_delta):
-        for obj in self.object_list:
-            if obj.entity:
-                if obj.status.health <= 0:
-                    self.object_list.remove(obj)
-                    obj = None
-                    continue
+        # for obj in self.object_list:
+        #     if obj.entity:
+        #         if obj.status.health <= 0:
+        #             self.object_list.remove(obj)
+        #             obj = None
+        #             continue
                 
         self.player.bottom_atk_rect = self.pygame.rect.Rect(self.player.x - 15, self.player.y + 8, 45, 30)
         self.player.top_atk_rect = self.pygame.rect.Rect(self.player.x - 15, self.player.y - 8, 45, 30)

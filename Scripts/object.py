@@ -48,6 +48,7 @@ class Object:
     def update(self, screen):
         if self.entity:
             if self.status.health <= 0:
+                self.rect = None
                 return
         # this is for chunked objects on the horizontal axis but will also work on unchunked obects
         x = self.x
@@ -120,6 +121,8 @@ class Object:
                     continue
                 
                 if obj.collision:
+                    if obj.rect is None:
+                        continue
                     if self.rect.colliderect(obj.rect):
                         if dx > 0:  # Moving right; Hit the left side of the wall
                             self.rect.right = obj.rect.left

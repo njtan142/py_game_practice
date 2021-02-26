@@ -83,10 +83,16 @@ while running:
                     for obj in scene_manager.active_scene.assets.object_list:
                         # print(obj)
                         if obj.entity:
+                            if obj.rect is None:
+                                continue
                             if obj == scene_manager.active_scene.assets.player:
                                 continue
                             if rect.colliderect(obj.rect):
                                 obj.status.take_damage(scene_manager.active_scene.assets.player.status.power)
+            if event.key == pygame.K_e:
+                if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
+                    scene_manager.active_scene.assets.change_level("level1")
+            
         if event.type == pygame.VIDEORESIZE:
             pygame.display._resize_event(event)
                         
