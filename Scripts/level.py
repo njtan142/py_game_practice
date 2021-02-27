@@ -10,9 +10,10 @@ def tile_map(tile_map_array, image, width, height, collision_list, spawns=[]):
         last_loop_count = 0
         last_number = 0
         for row in column.split(","):
+            row = row.split("-")
+
             for tup in spawns:
-               
-                if row == tup[0]:
+                if row[0] == tup[0]:
                     if tup[3]:
                         obj = Obj(0, 0, tup[1].image, False, tup[1].layer, tup[1].entity)
                         if obj.entity:
@@ -22,17 +23,17 @@ def tile_map(tile_map_array, image, width, height, collision_list, spawns=[]):
                         obj = tup[1]
                     obj.x = x
                     obj.y = y
-                    row = str(tup[2])
+                    row[0] = row[1]
                 
-            tile = Obj(x, y, image[int(row)-1], False)
+            tile = Obj(x, y, image[int(row[0])-1], False)
 
-            tile.collision = collision_list[int(row)-1]
-            if last_number == int(row):
+            tile.collision = collision_list[int(row[0])-1]
+            if last_number == int(row[0]):
                 tile.loop += last_loop_count
                 tile_map_list.pop()
             tile_map_list.append(tile)
             last_loop_count = tile.loop
-            last_number = int(row)
+            last_number = int(row[0])
             x += width
         y += height
     for block in objects:

@@ -101,7 +101,7 @@ while running:
     if scene_manager.active_scene is not None:
         scene_manager.active_scene.run(time_delta * time_scale)
         
-    pygame.draw.rect(screen, (255, 0, 0), rect or (0,0,0,0))
+    # pygame.draw.rect(screen, (255, 0, 0), rect or (0,0,0,0))
     pygame.display.flip()
     # pygame.image.save(screen, "record/" + str(loop) + ".jpeg")
     loop += 1

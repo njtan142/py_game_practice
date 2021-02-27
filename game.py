@@ -268,6 +268,7 @@ class Game:
         self.player.right_atk_rect = self.pygame.rect.Rect(self.player.x, self.player.y, 35, 40)
         self.player.left_atk_rect = self.pygame.rect.Rect(self.player.x-20, self.player.y, 35, 40)
         self.player.pygame = pygame
+        self.player.status.power = 30
         
         
         self.dummy = Obj(0,0, pygame.image.load(self.assets["dummy"]).convert_alpha(), False, 1, True)
@@ -330,7 +331,7 @@ class Game:
                     'level0', get_layout('Levels/level1.txt'),
                     self.block_img_list,
                     self.block_collisions,
-                    [('s', self.player, 23, False), ('d', self.dummy, 20, True)]
+                    [('s', self.player, 21, False), ('d', self.dummy, 20, True)]
                     )
 
         
@@ -347,6 +348,7 @@ class Game:
         for block in self.block_object_list:
             self.object_list.append(block)
         print(len(self.object_list), len(self.block_object_list))
+        
         # camera
         camera_obj = Obj(self.screen.get_width() / 2, self.screen.get_height() / 2, None)
         self.camera = Cam(camera_obj, self.object_list, self.player)
@@ -371,6 +373,7 @@ class Game:
             self.object_list.append(block)
         self.renderer = Renderer()
         self.renderer.add(self.object_list)
+        print(len(self.object_list), len(self.block_object_list))
 
         
 
@@ -387,7 +390,6 @@ class Game:
         self.player.right_atk_rect = self.pygame.rect.Rect(self.player.x, self.player.y, 35, 40)
         self.player.left_atk_rect = self.pygame.rect.Rect(self.player.x-20, self.player.y, 35, 40)
                     
-        # clock.tick(60)
 
         # input handler
         key_state = self.pygame.key.get_pressed()
@@ -398,8 +400,8 @@ class Game:
         self.screen.fill((0, 0, 0))
 
 
-        # player update
-        # animation logics
+        #
+        # player animation logics
         if vertical == 1:
             self.player.anim_c.set_state('walk down')
             self.player.anim_c.play_animation("walk down", self.screen, time_delta, self.player, -3, -6)
@@ -445,20 +447,15 @@ class Game:
                 if self.player.anim_c.play_animation("attack right", self.screen, time_delta, self.player, -12, -1):
                     self.player.attacking = False
             
- 
+        # player movement
         self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
+        
         # camera update
-        
-        
-        
-        
         self.camera.update(self.object_list)
-        # first layer update
+        
+        # layered update
         self.renderer.render(self.screen)
-        # self.pygame.draw.rect(self.screen, (255, 0, 0), self.player.bottom_atk_rect)
 
-        # screen update
-        # self.pygame.display.update()
         self.fps += 1
         self.time_count += time_delta
         if self.time_count >= 1:
