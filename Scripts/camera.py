@@ -6,13 +6,12 @@ class Camera:
         self.obj = self_object
 
     def update(self, object_list):
-        
         x = self.obj.x - self.follow.x
         y = self.obj.y - self.follow.y
-        
+
         if self.objects != object_list:
             self.objects = object_list
-        i = 0
+
         for obj in self.objects:
             obj.move(x, y, object_list)
             

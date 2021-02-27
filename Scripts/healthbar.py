@@ -9,4 +9,3 @@ class HealthBar:
         
         # Current health
         pygame.draw.line(screen, (0, 200, 0), (pos[0], pos[1]), (pos[0] + (dimension[0] * self.status.health/self.status.max_health), pos[1] + dimension[1]))
-        

@@ -15,28 +15,28 @@ class Object:
         self.loop = 1
         self.is_player = is_player
         self.image = image
-        
+
         # variables used by other functons
         self.offsetx = 0
         self.offsety = 0
-        
+
         self.float_x = 0
         self.float_y = 0
-        
+
         # define the collision based on the image
         if image is None:
             self.rect = pygame.rect.Rect(x, y, 0, 0)
             self.o_w = 0
             self.o_h = 0
-            
+
         else:
             self.rect = pygame.rect.Rect(self.x, self.y, image.get_width(), image.get_height())
             self.o_w = image.get_width()
             self.o_h = image.get_height()
-            
+
         if not self.collision:
             self.rect = None
-            
+
         # for layered rendering
         self.layer = layer
         
@@ -61,10 +61,10 @@ class Object:
         if self.collision:
             self.rect.x = x + self.image.get_width()
             self.rect.width = width
-            
+
         if self.entity:
             self.health_bar.show_healthbar(screen, self.pygame, (self.x, self.y), (width,0))
-        
+
         # reset the offset so that it wont affect other animations
         self.offsetx = 0
         self.offsety = 0
@@ -76,7 +76,7 @@ class Object:
                 return
         if not self.is_player: #performance reasons
             walls = None
-        
+
         # moving the objects by integers instead of float because of the way pygame.rect works
         self.float_x += x - int(x)
         self.float_y += y - int(y)

@@ -1,6 +1,3 @@
-import math
-
-
 class Anim:
 
     def __init__(self, name, image_list, duration):
@@ -21,7 +18,7 @@ class Anim:
         # because of the way the pygame positioning works, adding offsetting the pygame.Surface.blit will help make the animation look seamless without messing up or breaking the collision
         object.offsetx = x_offset
         object.offsety = y_offset
-        
+
         # Resets the counter
         if self.counter >= self.duration:
             self.counter -= self.duration

@@ -66,20 +66,19 @@ while running:
                 if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
                     scene_manager.active_scene.assets.player.attacking = True
                     direction = scene_manager.active_scene.assets.player_state
-                    
+
                     if 'down' in direction:
                         rect = scene_manager.active_scene.assets.player.bottom_atk_rect
-                        pass
+                        
                     if 'up' in direction:
                         rect = scene_manager.active_scene.assets.player.top_atk_rect
-                        pass
+                        
                     if 'left' in direction:
                         rect = scene_manager.active_scene.assets.player.left_atk_rect
-                        pass
+                        
                     if 'right' in direction:
                         rect = scene_manager.active_scene.assets.player.right_atk_rect
-                        pass
-                    
+
                     for obj in scene_manager.active_scene.assets.object_list:
                         # print(obj)
                         if obj.entity:
@@ -100,7 +99,7 @@ while running:
 
     if scene_manager.active_scene is not None:
         scene_manager.active_scene.run(time_delta * time_scale)
-        
+
     # pygame.draw.rect(screen, (255, 0, 0), rect or (0,0,0,0))
     pygame.display.flip()
     # pygame.image.save(screen, "record/" + str(loop) + ".jpeg")

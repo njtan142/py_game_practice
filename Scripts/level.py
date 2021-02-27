@@ -24,7 +24,7 @@ def tile_map(tile_map_array, image, width, height, collision_list, spawns=[]):
                     obj.x = x
                     obj.y = y
                     row[0] = row[1]
-                
+
             tile = Obj(x, y, image[int(row[0])-1], False)
 
             tile.collision = collision_list[int(row[0])-1]
@@ -49,7 +49,7 @@ class Level:
         self.collisions = collisions
         self.arguments = arguments
         self.objects = tile_map(self.layout, self.images, 32, 32, self.collisions, self.arguments)
-        
+
     def load(self):
         return tile_map(self.layout, self.images, 32, 32, self.collisions, self.arguments)
 
