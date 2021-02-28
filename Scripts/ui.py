@@ -3,10 +3,13 @@ class Text:
         self.font = font
         self.color = color
         self.image = self.font.render(text, True, color)
-        self.pos = pos
+        self.pos = (pos[0] - self.image.get_width()/2, pos[1] - self.image.get_height()/2)
         
     def update(self, screen):
-        screen.blit(self.image, self.pos)
+        try:
+            screen.blit(self.image, self.pos)
+        except TypeError:
+            screen.blit(self.image[0], self.pos )
         
     def change(self, text):
         self.image = self.font.render(text, True, self.color)

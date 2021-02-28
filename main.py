@@ -1,6 +1,7 @@
 from datetime import datetime as dt
 import pygame
 from game import Game
+from menu import Menu
 from Scripts.scene import Scene
 from Scripts.scenemanager import SceneManager
 import sys
@@ -32,7 +33,11 @@ screen = pygame.display.set_mode((640, 320))
 
 scene_manager = SceneManager()
 game_scene = Scene(Game(pygame, screen))
+menu_scene = Scene(Menu(pygame, screen))
 scene_manager.scenes["game_scene"] = game_scene
+scene_manager.scenes["menu_scene"] = menu_scene
+
+scene_manager.active_scene = scene_manager.scenes["menu_scene"]
 
 clock = pygame.time.Clock()
 
@@ -50,7 +55,7 @@ timescale = 1
 loop = 0
 while running:
 
-    # clock.tick(60)
+    
     rect = None
 
 
@@ -115,3 +120,5 @@ while running:
     time_count += time_delta
     current_time_dt = dt.now()
     current_time_ts = dt.timestamp(current_time_dt)
+    
+    clock.tick(60)
