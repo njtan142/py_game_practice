@@ -4,6 +4,7 @@ from Scripts.animationc import animationC
 from Scripts.level import Level
 from Scripts.levelmanager import LevelManager
 from Scripts.renderer import Renderer
+from Scripts.canvas import Canvas
 import sys
 import os
 
@@ -43,7 +44,13 @@ class Game:
     def __init__(self, pygame, screen):
         self.name = "game"
         self.pygame = pygame
+        self.screen = screen
         self.clock = pygame.time.Clock()
+        self.canvas = Canvas(pygame, "canvas")
+        self.font = pygame.font.SysFont(None, 24)
+        self.canvas.text("kills", self.font, "Kills: ", (255, 0, 0), (self.screen.get_width()*0.05, 10))
+        self.kills = 0
+        self.canvas.text("kills counter", self.font, str(self.kills), (255,255,255), (self.screen.get_width()*0.15, 10))
         # Assets
         self.assets = {
             'iu1': resource_path("assets/idle up1.png"),
@@ -455,6 +462,8 @@ class Game:
         
         # layered update
         self.renderer.render(self.screen)
+        
+        self.canvas.renderUI(self.screen)
 
         self.fps += 1
         self.time_count += time_delta

@@ -63,6 +63,7 @@ class Object:
             self.rect.width = width
 
         if self.entity:
+            self.health_bar.show_healthbar(screen, self.pygame, (self.x, self.y-3), (width,3))
             self.health_bar.show_healthbar(screen, self.pygame, (self.x, self.y), (width,0))
 
         # reset the offset so that it wont affect other animations

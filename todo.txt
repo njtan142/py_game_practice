@@ -1,0 +1,6 @@
+TODo
+1. UI implementation
+2. requirements to go to the next level implementation
+3. animation for objects with animations
+4. progressive level change
+5. load and save system8

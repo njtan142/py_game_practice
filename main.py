@@ -28,7 +28,7 @@ def get_distance(object1, object2, x1, y1):
 
 # pygame initialization
 pygame.init()
-screen = pygame.display.set_mode((640, 480))
+screen = pygame.display.set_mode((640, 320))
 
 scene_manager = SceneManager()
 game_scene = Scene(Game(pygame, screen))
@@ -61,7 +61,7 @@ while running:
             if event.key == pygame.K_RETURN:
                 scene_manager.active_scene = scene_manager.scenes["game_scene"]
             if event.key == pygame.K_ESCAPE:
-                scene_manager.active_scene = None
+                running = False
             if event.key == pygame.K_SPACE:
                 if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
                     scene_manager.active_scene.assets.player.attacking = True
@@ -88,9 +88,14 @@ while running:
                                 continue
                             if rect.colliderect(obj.rect):
                                 obj.status.take_damage(scene_manager.active_scene.assets.player.status.power)
+                                if obj.status.health <= 0:
+                                    scene_manager.active_scene.assets.kills += 1
+                                    scene_manager.active_scene.assets.canvas.texts["kills counter"].change(str(scene_manager.active_scene.assets.kills))
+                                    
             if event.key == pygame.K_e:
                 if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
                     scene_manager.active_scene.assets.change_level("level1")
+                    
             
         if event.type == pygame.VIDEORESIZE:
             pygame.display._resize_event(event)
