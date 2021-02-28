@@ -16,12 +16,15 @@ def resource_path(relative_path):
         base_path = os.path.abspath("")
     return os.path.join(base_path, relative_path)
 
+
 def get_layout(path):
     level1 = open(resource_path(path), 'r')
     string = level1.read()
     layout = string.split('\n')
     level1.close()
     return layout
+
+
 # stand alone functions
 def get_distance(object1, object2, x1, y1):
     x_1 = object1.x + x1 - object2.x
@@ -48,9 +51,12 @@ class Game:
         self.clock = pygame.time.Clock()
         self.canvas = Canvas(pygame, "canvas")
         self.font = pygame.font.SysFont(None, 24)
-        self.canvas.text("kills", self.font, "Kills: ", (255, 0, 0), (self.screen.get_width()*0.05, 10))
+        self.canvas.text("kills", self.font, "Kills: ", (255, 0, 0), (self.screen.get_width() * 0.05, 10))
         self.kills = 0
-        self.canvas.text("kills counter", self.font, str(self.kills), (255,255,255), (self.screen.get_width()*0.15, 10))
+        self.canvas.text("kills counter", self.font, str(self.kills), (255, 255, 255),
+                         (self.screen.get_width() * 0.15, 10))
+        self.canvas.text("continue to next level", self.font, "", (0, 0, 0),
+                         (self.screen.get_width()/2, self.screen.get_height()*0.48))
         # Assets
         self.assets = {
             'iu1': resource_path("assets/idle up1.png"),
@@ -233,7 +239,7 @@ class Game:
             pygame.image.load(self.assets['ss_id4']).convert_alpha()
         ]
         player_anim_controller.add_animation("idle down", self.player_idle_down, 1)
-        
+
         self.player_idle_down = [  # player attack up animation image list
             pygame.image.load(self.assets['ss_au1']).convert_alpha(),
             pygame.image.load(self.assets['ss_au2']).convert_alpha(),
@@ -241,7 +247,7 @@ class Game:
             pygame.image.load(self.assets['ss_au4']).convert_alpha()
         ]
         player_anim_controller.add_animation("attack up", self.player_idle_down, 0.1)
-        
+
         self.player_idle_down = [  # player attack left animation image list
             pygame.image.load(self.assets['ss_al1']).convert_alpha(),
             pygame.image.load(self.assets['ss_al2']).convert_alpha(),
@@ -249,7 +255,7 @@ class Game:
             pygame.image.load(self.assets['ss_al4']).convert_alpha()
         ]
         player_anim_controller.add_animation("attack left", self.player_idle_down, 0.1)
-    
+
         self.player_idle_down = [  # player attack right animation image list
             pygame.image.load(self.assets['ss_ar1']).convert_alpha(),
             pygame.image.load(self.assets['ss_ar2']).convert_alpha(),
@@ -257,7 +263,7 @@ class Game:
             pygame.image.load(self.assets['ss_ar4']).convert_alpha()
         ]
         player_anim_controller.add_animation("attack right", self.player_idle_down, 0.1)
-        
+
         self.player_idle_down = [  # player attack right animation image list
             pygame.image.load(self.assets['ss_ad1']).convert_alpha(),
             pygame.image.load(self.assets['ss_ad2']).convert_alpha(),
@@ -265,7 +271,6 @@ class Game:
             pygame.image.load(self.assets['ss_ad4']).convert_alpha()
         ]
         player_anim_controller.add_animation("attack down", self.player_idle_down, 0.1)
-    
 
         self.player = Obj(0, 0, pygame.image.load(self.assets["iu1"]).convert_alpha(), True, 2, True)
         self.player.anim_c = player_anim_controller
@@ -273,12 +278,11 @@ class Game:
         self.player.bottom_atk_rect = self.pygame.rect.Rect(self.player.x - 15, self.player.y + 8, 45, 30)
         self.player.top_atk_rect = self.pygame.rect.Rect(self.player.x - 15, self.player.y - 8, 45, 30)
         self.player.right_atk_rect = self.pygame.rect.Rect(self.player.x, self.player.y, 35, 40)
-        self.player.left_atk_rect = self.pygame.rect.Rect(self.player.x-20, self.player.y, 35, 40)
+        self.player.left_atk_rect = self.pygame.rect.Rect(self.player.x - 20, self.player.y, 35, 40)
         self.player.pygame = pygame
         self.player.status.power = 30
-        
-        
-        self.dummy = Obj(0,0, pygame.image.load(self.assets["dummy"]).convert_alpha(), False, 1, True)
+
+        self.dummy = Obj(0, 0, pygame.image.load(self.assets["dummy"]).convert_alpha(), False, 1, True)
         self.dummy.pygame = pygame
         # block image
 
@@ -287,64 +291,65 @@ class Game:
         # tile map creation
 
         self.block_img_list = [
-                               pygame.transform.scale(pygame.image.load(self.assets['11']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['12']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['13']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['14']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['15']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['21']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['22']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['23']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['24']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['25']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['31']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['32']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['33']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['34']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['35']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['41']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['42']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['43']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['44']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['45']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['51']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['52']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['53']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['54']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['55']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['61']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['62']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['63']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['64']).convert(), (32, 32)),
-                               pygame.transform.scale(pygame.image.load(self.assets['65']).convert(), (32, 32))
-                               ]
+            pygame.transform.scale(pygame.image.load(self.assets['11']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['12']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['13']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['14']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['15']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['21']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['22']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['23']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['24']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['25']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['31']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['32']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['33']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['34']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['35']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['41']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['42']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['43']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['44']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['45']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['51']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['52']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['53']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['54']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['55']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['61']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['62']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['63']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['64']).convert(), (32, 32)),
+            pygame.transform.scale(pygame.image.load(self.assets['65']).convert(), (32, 32))
+        ]
         self.block_collisions = [True, True, True, True, True,
                                  True, True, True, True, True,
                                  False, False, False, False, False,
                                  False, False, False, False, False,
                                  False, False, False, False, True,
                                  False, False, False, False, False
-                                ]
+                                 ]
         self.block_list = get_layout('Levels/level0.txt')
 
         self.levels = LevelManager()
         self.levels.levels_dict["level0"] = Level(
-                    'level0', get_layout('Levels/level0.txt'),
-                    self.block_img_list,
-                    self.block_collisions,
-                    [('s', self.player, 23, False), ('d', self.dummy, 20, True)]
-                    )
+            'level0', get_layout('Levels/level0.txt'),
+            self.block_img_list,
+            self.block_collisions,
+            [('s', self.player, 23, False), ('d', self.dummy, 20, True)],
+            4
+        )
         self.levels.levels_dict["level1"] = Level(
-                    'level0', get_layout('Levels/level1.txt'),
-                    self.block_img_list,
-                    self.block_collisions,
-                    [('s', self.player, 21, False), ('d', self.dummy, 20, True)]
-                    )
+            'level0', get_layout('Levels/level1.txt'),
+            self.block_img_list,
+            self.block_collisions,
+            [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
+            5
+        )
 
-        
         self.levels.active_level = self.levels.levels_dict["level0"]
         self.block_object_list = self.levels.active_level.objects
-        
+
         # frames counter (FPS)
         self.fps = 0
 
@@ -355,20 +360,26 @@ class Game:
         for block in self.block_object_list:
             self.object_list.append(block)
         print(len(self.object_list), len(self.block_object_list))
-        
+
         # camera
         camera_obj = Obj(self.screen.get_width() / 2, self.screen.get_height() / 2, None)
         self.camera = Cam(camera_obj, self.object_list, self.player)
-        
-        #layer rendering
+
+        # layer rendering
         self.renderer = Renderer()
         self.renderer.add(self.object_list)
-        
+
+
         # self.object_list[3] = None
-        
+
     def change_level(self, name):
+        if self.kills is not self.levels.active_level.requirements:
+            return
+        self.canvas.texts["continue to next level"].change("")
+        self.levels.active_level = self.levels.levels_dict[name]
         self.block_object_list = self.levels.levels_dict[name].load()
-        
+        self.kills = 0
+        self.canvas.texts["kills counter"].change(str(self.kills) + "/" + str(self.levels.active_level.requirements))
         # frames counter (FPS)
         self.fps = 0
 
@@ -381,8 +392,6 @@ class Game:
         self.renderer = Renderer()
         self.renderer.add(self.object_list)
         print(len(self.object_list), len(self.block_object_list))
-
-        
 
     def run(self, time_delta):
         # for obj in self.object_list:
@@ -391,12 +400,11 @@ class Game:
         #             self.object_list.remove(obj)
         #             obj = None
         #             continue
-                
+
         self.player.bottom_atk_rect = self.pygame.rect.Rect(self.player.x - 15, self.player.y + 8, 45, 30)
         self.player.top_atk_rect = self.pygame.rect.Rect(self.player.x - 15, self.player.y - 8, 45, 30)
         self.player.right_atk_rect = self.pygame.rect.Rect(self.player.x, self.player.y, 35, 40)
-        self.player.left_atk_rect = self.pygame.rect.Rect(self.player.x-20, self.player.y, 35, 40)
-                    
+        self.player.left_atk_rect = self.pygame.rect.Rect(self.player.x - 20, self.player.y, 35, 40)
 
         # input handler
         key_state = self.pygame.key.get_pressed()
@@ -405,7 +413,6 @@ class Game:
 
         # background
         self.screen.fill((0, 0, 0))
-
 
         #
         # player animation logics
@@ -421,11 +428,10 @@ class Game:
         elif horizontal == -1:
             self.player.anim_c.set_state('walk left')
             self.player.anim_c.play_animation("walk left", self.screen, time_delta, self.player, -2, -6)
-        
-        
+
         player_state = self.player.anim_c.get_state()
         self.player_state = player_state
-        
+
         if vertical == 0 and horizontal == 0:
             if 'down' in player_state:
                 self.player.anim_c.set_state('idle down')
@@ -439,7 +445,7 @@ class Game:
             if 'right' in player_state:
                 self.player.anim_c.set_state('idle right')
                 self.player.anim_c.play_animation("idle right", self.screen, time_delta, self.player, -2, -6)
-        
+
         if self.player.attacking:
             if 'down' in player_state:
                 if self.player.anim_c.play_animation("attack down", self.screen, time_delta, self.player, -22, 0):
@@ -453,17 +459,19 @@ class Game:
             if 'right' in player_state:
                 if self.player.anim_c.play_animation("attack right", self.screen, time_delta, self.player, -12, -1):
                     self.player.attacking = False
-            
+
         # player movement
         self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
-        
+
         # camera update
         self.camera.update(self.object_list)
-        
+
         # layered update
         self.renderer.render(self.screen)
-        
+
         self.canvas.renderUI(self.screen)
+        if self.kills == self.levels.active_level.requirements:
+            self.canvas.texts["continue to next level"].change("Press enter to continue to next level")
 
         self.fps += 1
         self.time_count += time_delta
@@ -471,7 +479,3 @@ class Game:
             print(self.fps)
             self.fps = 0
             self.time_count -= 1
-    
-
-
-

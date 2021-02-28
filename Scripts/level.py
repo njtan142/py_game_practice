@@ -25,9 +25,9 @@ def tile_map(tile_map_array, image, width, height, collision_list, spawns=[]):
                     obj.y = y
                     row[0] = row[1]
 
-            tile = Obj(x, y, image[int(row[0])-1], False)
+            tile = Obj(x, y, image[int(row[0]) - 1], False)
 
-            tile.collision = collision_list[int(row[0])-1]
+            tile.collision = collision_list[int(row[0]) - 1]
             if last_number == int(row[0]):
                 tile.loop += last_loop_count
                 tile_map_list.pop()
@@ -42,14 +42,14 @@ def tile_map(tile_map_array, image, width, height, collision_list, spawns=[]):
 
 
 class Level:
-    def __init__(self, name, layout, images, collisions, arguments):
+    def __init__(self, name, layout, images, collisions, arguments, requirements=0):
         self.name = name
         self.layout = layout
         self.images = images
         self.collisions = collisions
         self.arguments = arguments
+        self.requirements = requirements
         self.objects = tile_map(self.layout, self.images, 32, 32, self.collisions, self.arguments)
 
     def load(self):
         return tile_map(self.layout, self.images, 32, 32, self.collisions, self.arguments)
-

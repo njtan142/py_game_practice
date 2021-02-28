@@ -41,13 +41,12 @@ scene_manager.active_scene = scene_manager.scenes["menu_scene"]
 
 clock = pygame.time.Clock()
 
-
 current_time_dt = dt.now()
 current_time_ts = dt.timestamp(current_time_dt)
 last_time_dt = dt.now()
 last_time_ts = dt.timestamp(last_time_dt)
 time_count = 0
-time_delta = 0.016 #1/60 of a second
+time_delta = 0.016  # 1/60 of a second
 time_scale = 1
 
 running = True
@@ -55,16 +54,19 @@ timescale = 1
 loop = 0
 while running:
 
-    
     rect = None
-
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
-                scene_manager.active_scene = scene_manager.scenes["game_scene"]
+                if scene_manager.active_scene != scene_manager.scenes["game_scene"]:
+                    scene_manager.active_scene = scene_manager.scenes["game_scene"]
+                    continue
+
+                if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
+                    scene_manager.active_scene.assets.change_level("level1")
             if event.key == pygame.K_ESCAPE:
                 running = False
             if event.key == pygame.K_SPACE:
@@ -74,13 +76,13 @@ while running:
 
                     if 'down' in direction:
                         rect = scene_manager.active_scene.assets.player.bottom_atk_rect
-                        
+
                     if 'up' in direction:
                         rect = scene_manager.active_scene.assets.player.top_atk_rect
-                        
+
                     if 'left' in direction:
                         rect = scene_manager.active_scene.assets.player.left_atk_rect
-                        
+
                     if 'right' in direction:
                         rect = scene_manager.active_scene.assets.player.right_atk_rect
 
@@ -95,17 +97,8 @@ while running:
                                 obj.status.take_damage(scene_manager.active_scene.assets.player.status.power)
                                 if obj.status.health <= 0:
                                     scene_manager.active_scene.assets.kills += 1
-                                    scene_manager.active_scene.assets.canvas.texts["kills counter"].change(str(scene_manager.active_scene.assets.kills))
-                                    
-            if event.key == pygame.K_e:
-                if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
-                    scene_manager.active_scene.assets.change_level("level1")
-                    
-            
-        if event.type == pygame.VIDEORESIZE:
-            pygame.display._resize_event(event)
-                        
-
+                                    scene_manager.active_scene.assets.canvas.texts["kills counter"].change(
+                                        str(scene_manager.active_scene.assets.kills) + "/" + str(scene_manager.active_scene.assets.levels.active_level.requirements))
 
     if scene_manager.active_scene is not None:
         scene_manager.active_scene.run(time_delta * time_scale)
@@ -120,5 +113,5 @@ while running:
     time_count += time_delta
     current_time_dt = dt.now()
     current_time_ts = dt.timestamp(current_time_dt)
-    
-    clock.tick(60)
+
+    # clock.tick(60)
