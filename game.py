@@ -5,6 +5,7 @@ from Scripts.level import Level
 from Scripts.levelmanager import LevelManager
 from Scripts.renderer import Renderer
 from Scripts.canvas import Canvas
+from Scripts.bounds import Bounds
 import sys
 import os
 
@@ -362,13 +363,17 @@ class Game:
             self.object_list.append(block)
         print(len(self.object_list), len(self.block_object_list))
 
+        self.bounds = Bounds(0, 0, self.object_list, 0, 640, 0, 320)
         # camera
         camera_obj = Obj(self.screen.get_width() / 2, self.screen.get_height() / 2, None)
-        self.camera = Cam(camera_obj, self.object_list, self.player)
+        self.camera = Cam(camera_obj, self.object_list, self.player, self.bounds)
 
         # layer rendering
         self.renderer = Renderer()
         self.renderer.add(self.object_list)
+
+        for obj in self.object_list:
+            obj.walls = self.object_list
 
 
         # self.object_list[3] = None
@@ -402,6 +407,8 @@ class Game:
         self.renderer = Renderer()
         self.renderer.add(self.object_list)
         print(len(self.object_list), len(self.block_object_list))
+        for obj in self.object_list:
+            obj.walls = self.object_list
 
     def run(self, time_delta):
         # for obj in self.object_list:
@@ -474,11 +481,12 @@ class Game:
         self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
 
         # camera update
-        self.camera.update(self.object_list)
+        # self.camera.update(self.object_list, time_delta)
 
         # layered update
         self.renderer.render(self.screen, time_delta)
-
+        # self.bounds.check()
+        print(self.player.ox)
         self.canvas.renderUI(self.screen)
         if self.kills == self.levels.active_level.requirements:
             self.canvas.texts["continue to next level"].change("Press enter to continue to next level")

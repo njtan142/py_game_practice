@@ -12,6 +12,8 @@ class Object:
         # core variables
         self.x = x
         self.y = y
+        self.ox = x
+        self.oy = y
         self.collision = True
         self.loop = 1
         self.is_player = is_player
@@ -47,7 +49,7 @@ class Object:
 
         self.is_automation = automation
         if self.is_automation:
-            self.automation = AI(self, 30)
+            self.automation = AI(self, 100)
 
         self.walls = None
 
@@ -152,6 +154,10 @@ class Object:
                             self.rect.bottom = obj.rect.top
                         if dy < 0:  # Moving up; Hit the bottom side of the wall
                             self.rect.top = obj.rect.bottom
+                    else:
+                        self.ox = self.x
+                        self.oy = self.y
+
         if self.collision:
             self.x = self.rect.x
             self.y = self.rect.y
