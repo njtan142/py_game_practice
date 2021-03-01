@@ -66,7 +66,7 @@ while running:
                     continue
 
                 if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
-                    scene_manager.active_scene.assets.change_level("level1")
+                    scene_manager.active_scene.assets.change_level()
             if event.key == pygame.K_ESCAPE:
                 running = False
             if event.key == pygame.K_SPACE:

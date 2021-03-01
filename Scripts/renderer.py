@@ -19,9 +19,9 @@ class Renderer:
         self.render_list.sort()
         
         
-    def render(self, screen):
+    def render(self, screen, time_delta):
         for key in self.render_list:
             for object in self.render_dict[key]:
-                object.update(screen)
+                object.update(screen, time_delta)
     
     

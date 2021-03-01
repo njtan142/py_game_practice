@@ -9,9 +9,7 @@ class Camera:
         x = self.obj.x - self.follow.x
         y = self.obj.y - self.follow.y
 
-        if self.objects != object_list:
-            self.objects = object_list
 
-        for obj in self.objects:
+        for obj in object_list:
             obj.move(x, y, object_list)
-            
+

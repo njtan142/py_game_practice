@@ -2,11 +2,12 @@ import pygame
 import math
 from Scripts.status import Stats
 from Scripts.healthbar import HealthBar
+from Scripts.enemyMovement import AI
 
 
 class Object:
 
-    def __init__(self, x, y, image=None, is_player=False, layer=0, entity = False):
+    def __init__(self, x, y, image=None, is_player=False, layer=0, entity=False, automation=False):
         self.entity = entity
         # core variables
         self.x = x
@@ -16,7 +17,7 @@ class Object:
         self.is_player = is_player
         self.image = image
 
-        # variables used by other functons
+        # variables used by other functions
         self.offsetx = 0
         self.offsety = 0
 
@@ -39,17 +40,24 @@ class Object:
 
         # for layered rendering
         self.layer = layer
-        
+
         # healthbar and status if it is an entity
         self.status = Stats()
         self.health_bar = HealthBar(self.status)
 
+        self.is_automation = automation
+        if self.is_automation:
+            self.automation = AI(self, 30)
 
-    def update(self, screen):
+        self.walls = None
+
+    def update(self, screen, time_delta):
         if self.entity:
             if self.status.health <= 0:
                 self.rect = None
                 return
+        if self.is_automation and self.walls is not None:
+            self.automation.movement(time_delta)
         # this is for chunked objects on the horizontal axis but will also work on unchunked obects
         x = self.x
         width = 0
@@ -63,20 +71,24 @@ class Object:
             self.rect.width = width
 
         if self.entity:
-            self.health_bar.show_healthbar(screen, self.pygame, (self.x, self.y-3), (width,3))
-            self.health_bar.show_healthbar(screen, self.pygame, (self.x, self.y), (width,0))
+            self.health_bar.show_healthbar(screen, self.pygame, (self.x, self.y - 3), (width, 3))
+            self.health_bar.show_healthbar(screen, self.pygame, (self.x, self.y), (width, 0))
 
         # reset the offset so that it wont affect other animations
         self.offsetx = 0
         self.offsety = 0
 
-
     def move(self, x, y, walls=None):
         if self.entity:
             if self.status.health <= 0:
                 return
-        if not self.is_player: #performance reasons
+        if not self.is_player:  # performance reasons
             walls = None
+        if self.is_player:
+            if walls is not None:
+                self.walls = walls
+            else:
+                walls = self.walls
 
         # moving the objects by integers instead of float because of the way pygame.rect works
         self.float_x += x - int(x)
@@ -103,7 +115,6 @@ class Object:
         if math.fabs(y) >= 1:
             self.move_single_axis(0, y, walls)
 
-
     def move_single_axis(self, dx, dy, walls):
         if self.entity:
             if self.status.health <= 0:
@@ -120,11 +131,19 @@ class Object:
             for obj in walls:
                 if obj == self:
                     continue
-                
+
                 if obj.collision:
                     if obj.rect is None:
                         continue
                     if self.rect.colliderect(obj.rect):
+                        if self.is_automation:
+
+                            if obj.is_player and not obj.is_automation:
+                                obj.status.take_damage(self.automation.attack())
+                                pass
+                            else:
+                                self.automation.change()
+
                         if dx > 0:  # Moving right; Hit the left side of the wall
                             self.rect.right = obj.rect.left
                         if dx < 0:  # Moving left; Hit the right side of the wall

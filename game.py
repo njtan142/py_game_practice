@@ -57,6 +57,7 @@ class Game:
                          (self.screen.get_width() * 0.15, 10))
         self.canvas.text("continue to next level", self.font, "", (0, 0, 0),
                          (self.screen.get_width()/2, self.screen.get_height()*0.48))
+        self.current_level = 0
         # Assets
         self.assets = {
             'iu1': resource_path("assets/idle up1.png"),
@@ -281,8 +282,8 @@ class Game:
         self.player.left_atk_rect = self.pygame.rect.Rect(self.player.x - 20, self.player.y, 35, 40)
         self.player.pygame = pygame
         self.player.status.power = 30
-
-        self.dummy = Obj(0, 0, pygame.image.load(self.assets["dummy"]).convert_alpha(), False, 1, True)
+        print(self.player.is_player, self.player.is_automation)
+        self.dummy = Obj(0, 0, pygame.image.load(self.assets["dummy"]).convert_alpha(), True, 1, True, True)
         self.dummy.pygame = pygame
         # block image
 
@@ -329,25 +330,25 @@ class Game:
                                  False, False, False, False, True,
                                  False, False, False, False, False
                                  ]
-        self.block_list = get_layout('Levels/level0.txt')
+        self.block_list = get_layout('Levels/0.txt')
 
         self.levels = LevelManager()
-        self.levels.levels_dict["level0"] = Level(
-            'level0', get_layout('Levels/level0.txt'),
+        self.levels.levels_dict["0"] = Level(
+            '0', get_layout('Levels/0.txt'),
             self.block_img_list,
             self.block_collisions,
             [('s', self.player, 23, False), ('d', self.dummy, 20, True)],
             4
         )
-        self.levels.levels_dict["level1"] = Level(
-            'level0', get_layout('Levels/level1.txt'),
+        self.levels.levels_dict["1"] = Level(
+            '0', get_layout('Levels/1.txt'),
             self.block_img_list,
             self.block_collisions,
             [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
             5
         )
 
-        self.levels.active_level = self.levels.levels_dict["level0"]
+        self.levels.active_level = self.levels.levels_dict["0"]
         self.block_object_list = self.levels.active_level.objects
 
         # frames counter (FPS)
@@ -372,8 +373,17 @@ class Game:
 
         # self.object_list[3] = None
 
-    def change_level(self, name):
+    def change_level(self, name=None):
         if self.kills is not self.levels.active_level.requirements:
+            return
+        if name is None:
+            name = str(self.current_level + 1)
+        self.current_level += 1
+        try:
+            self.levels.active_level = self.levels.levels_dict[name]
+        except KeyError:
+            print("uy")
+            self.canvas.texts["continue to next level"].change("You finished the game, no more levels")
             return
         self.canvas.texts["continue to next level"].change("")
         self.levels.active_level = self.levels.levels_dict[name]
@@ -467,11 +477,13 @@ class Game:
         self.camera.update(self.object_list)
 
         # layered update
-        self.renderer.render(self.screen)
+        self.renderer.render(self.screen, time_delta)
 
         self.canvas.renderUI(self.screen)
         if self.kills == self.levels.active_level.requirements:
             self.canvas.texts["continue to next level"].change("Press enter to continue to next level")
+        if self.player.status.health <= 0:
+            self.canvas.texts["continue to next level"].change("Game Over")
 
         self.fps += 1
         self.time_count += time_delta

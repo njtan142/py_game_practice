@@ -7,6 +7,8 @@ class Stats:
         self.defense = defense
 
     def take_damage(self, damage):
+        if damage == 0:
+            damage = self.defense
         self.health -= damage - self.defense
 
     def recover(self, health):
