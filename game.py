@@ -283,11 +283,12 @@ class Game:
         self.player.left_atk_rect = self.pygame.rect.Rect(self.player.x - 20, self.player.y, 35, 40)
         self.player.pygame = pygame
         self.player.status.power = 30
+        print(self.player.x, self.player.y)
         print(self.player.is_player, self.player.is_automation)
         self.dummy = Obj(0, 0, pygame.image.load(self.assets["dummy"]).convert_alpha(), True, 1, True, True)
         self.dummy.pygame = pygame
         # block image
-
+        print(self.player.x, self.player.y)
         # level editor s for player positio3
 
         # tile map creation
@@ -338,7 +339,7 @@ class Game:
             '0', get_layout('Levels/0.txt'),
             self.block_img_list,
             self.block_collisions,
-            [('s', self.player, 23, False), ('d', self.dummy, 20, True)],
+            [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
             4
         )
         self.levels.levels_dict["1"] = Level(
@@ -348,9 +349,17 @@ class Game:
             [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
             5
         )
+        self.levels.levels_dict["2"] = Level(
+            '0', get_layout('Levels/2.txt'),
+            self.block_img_list,
+            self.block_collisions,
+            [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
+            9
+        )
+
 
         self.levels.active_level = self.levels.levels_dict["0"]
-        self.block_object_list = self.levels.active_level.objects
+        self.block_object_list = self.levels.active_level.load()
 
         # frames counter (FPS)
         self.fps = 0
@@ -481,12 +490,12 @@ class Game:
         self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
 
         # camera update
-        # self.camera.update(self.object_list, time_delta)
+        self.camera.update(self.object_list, self.screen)
 
         # layered update
         self.renderer.render(self.screen, time_delta)
-        # self.bounds.check()
-        print(self.player.ox)
+
+
         self.canvas.renderUI(self.screen)
         if self.kills == self.levels.active_level.requirements:
             self.canvas.texts["continue to next level"].change("Press enter to continue to next level")

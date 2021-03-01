@@ -49,7 +49,7 @@ class Object:
 
         self.is_automation = automation
         if self.is_automation:
-            self.automation = AI(self, 100)
+            self.automation = AI(self, 50)
 
         self.walls = None
 
@@ -118,12 +118,15 @@ class Object:
             self.move_single_axis(0, y, walls)
 
     def move_single_axis(self, dx, dy, walls):
+
         if self.entity:
             if self.status.health <= 0:
                 return
+
         self.x += dx
         self.y += dy
         # Move the rect
+
         if self.collision:
             self.rect.x = int(self.x)
             self.rect.y = int(self.y)
