@@ -5,6 +5,7 @@ from Scripts.level import Level
 from Scripts.levelmanager import LevelManager
 from Scripts.renderer import Renderer
 from Scripts.canvas import Canvas
+from Scripts.bullet import Bullet
 import sys
 import os
 
@@ -140,7 +141,7 @@ class Game:
             'ss_ad2': resource_path("assets/ss/attack down_01_03.png"),
             'ss_ad3': resource_path("assets/ss/attack down_01_02.png"),
             'ss_ad4': resource_path("assets/ss/attack down_01_01.png"),
-            "grass": "assets/grass.png",
+            "grass": "assets/bullet.png",
             "block": "assets/block.png",
             "block2": "assets/block2.png",
             "dummy": "assets/enemies/dummy.png",
@@ -282,13 +283,12 @@ class Game:
         self.player.left_atk_rect = self.pygame.rect.Rect(self.player.x - 20, self.player.y, 35, 40)
         self.player.pygame = pygame
         self.player.status.power = 30
-        print(self.player.x, self.player.y)
-        print(self.player.is_player, self.player.is_automation)
+
         self.dummy = Obj(0, 0, pygame.image.load(self.assets["dummy"]).convert_alpha(), True, 1, True, True)
         self.dummy.pygame = pygame
-        # block image
-        print(self.player.x, self.player.y)
-        # level editor s for player positio3
+
+        self.bullet = Bullet(300, 10, 0, self.screen, self.pygame, pygame.image.load(self.assets['grass']), self.player)
+
 
         # tile map creation
 
@@ -393,13 +393,14 @@ class Game:
             self.levels.active_level = self.levels.levels_dict[name]
         except KeyError:
             print("uy")
-            self.canvas.texts["continue to next level"].change("You finished the game, no more levels")
+            self.canvas.texts["continue to next level"].change_direction("You finished the game, no more levels")
             return
-        self.canvas.texts["continue to next level"].change("")
+        self.canvas.texts["continue to next level"].change_direction("")
         self.levels.active_level = self.levels.levels_dict[name]
         self.block_object_list = self.levels.levels_dict[name].load()
         self.kills = 0
-        self.canvas.texts["kills counter"].change(str(self.kills) + "/" + str(self.levels.active_level.requirements))
+        self.canvas.texts["kills counter"].change_direction(
+            str(self.kills) + "/" + str(self.levels.active_level.requirements))
         # frames counter (FPS)
         self.fps = 0
 
@@ -414,8 +415,11 @@ class Game:
         print(len(self.object_list), len(self.block_object_list))
         for obj in self.object_list:
             obj.walls = self.object_list
+        self.bullet.bullets = []
 
     def run(self, time_delta):
+
+        # print(len(self.bullet.bullets))
         # for obj in self.object_list:
         #     if obj.entity:
         #         if obj.status.health <= 0:
@@ -493,9 +497,9 @@ class Game:
 
         self.canvas.renderUI(self.screen)
         if self.kills == self.levels.active_level.requirements:
-            self.canvas.texts["continue to next level"].change("Press enter to continue to next level")
+            self.canvas.texts["continue to next level"].change_direction("Press enter to continue to next level")
         if self.player.status.health <= 0:
-            self.canvas.texts["continue to next level"].change("Game Over")
+            self.canvas.texts["continue to next level"].change_direction("Game Over")
 
         self.fps += 1
         self.time_count += time_delta
@@ -503,3 +507,9 @@ class Game:
             print(self.fps)
             self.fps = 0
             self.time_count -= 1
+            if self.kills != self.levels.active_level.requirements:
+                self.bullet.spawn()
+            else:
+                self.bullet.bullets = []
+        self.bullet.move(time_delta)
+

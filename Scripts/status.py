@@ -6,10 +6,11 @@ class Stats:
         self.power = power
         self.defense = defense
 
-    def take_damage(self, damage):
+    def take_damage(self, damage, is_time=False, time_delta=1):
         if damage == 0:
             damage = self.defense
-        self.health -= damage - self.defense
+
+        self.health -= (damage - self.defense) * time_delta
 
     def recover(self, health):
         self.health += health

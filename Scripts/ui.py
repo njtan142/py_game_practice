@@ -11,7 +11,7 @@ class Text:
         except TypeError:
             screen.blit(self.image[0], self.pos)
 
-    def change(self, text):
+    def change_direction(self, text):
         self.pos = (self.pos[0] + self.image.get_width() / 2, self.pos[1] + self.image.get_height() / 2)
         self.image = self.font.render(text, True, self.color)
         self.pos = (self.pos[0] - self.image.get_width() / 2, self.pos[1] - self.image.get_height() / 2)

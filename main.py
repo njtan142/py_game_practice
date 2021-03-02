@@ -97,15 +97,16 @@ while running:
                                 obj.status.take_damage(scene_manager.active_scene.assets.player.status.power)
                                 if obj.status.health <= 0:
                                     scene_manager.active_scene.assets.kills += 1
-                                    scene_manager.active_scene.assets.canvas.texts["kills counter"].change(
-                                        str(scene_manager.active_scene.assets.kills) + "/" + str(scene_manager.active_scene.assets.levels.active_level.requirements))
+                                    scene_manager.active_scene.assets.canvas.texts["kills counter"].change_direction(
+                                        str(scene_manager.active_scene.assets.kills) + "/" + str(
+                                            scene_manager.active_scene.assets.levels.active_level.requirements))
 
     if scene_manager.active_scene is not None:
         scene_manager.active_scene.run(time_delta * time_scale)
 
     # pygame.draw.rect(screen, (255, 0, 0), rect or (0,0,0,0))
     pygame.display.flip()
-    pygame.image.save(screen, "record/" + str(loop) + ".jpg")
+    # pygame.image.save(screen, "record/" + str(loop) + ".jpg")
     loop += 1
     last_time_dt = dt.now()
     last_time_ts = dt.timestamp(last_time_dt)

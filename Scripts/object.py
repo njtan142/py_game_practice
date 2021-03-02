@@ -37,9 +37,6 @@ class Object:
             self.o_w = image.get_width()
             self.o_h = image.get_height()
 
-        if not self.collision:
-            self.rect = None
-
         # for layered rendering
         self.layer = layer
 
@@ -145,9 +142,8 @@ class Object:
 
                             if obj.is_player and not obj.is_automation:
                                 obj.status.take_damage(self.automation.attack())
-                                pass
                             else:
-                                self.automation.change()
+                                self.automation.change_direction()
 
                         if dx > 0:  # Moving right; Hit the left side of the wall
                             self.rect.right = obj.rect.left

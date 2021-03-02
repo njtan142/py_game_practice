@@ -29,7 +29,7 @@ class AI:
             y = 1 * time_delta * self.speed
         self.object.move(x, y)
 
-    def change(self):
+    def change_direction(self):
         self.direction = self.directions[random.randint(0, len(self.directions) - 1)]
 
     def attack(self):
