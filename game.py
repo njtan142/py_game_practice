@@ -5,7 +5,6 @@ from Scripts.level import Level
 from Scripts.levelmanager import LevelManager
 from Scripts.renderer import Renderer
 from Scripts.canvas import Canvas
-from Scripts.bounds import Bounds
 import sys
 import os
 
@@ -57,7 +56,7 @@ class Game:
         self.canvas.text("kills counter", self.font, str(self.kills), (255, 255, 255),
                          (self.screen.get_width() * 0.15, 10))
         self.canvas.text("continue to next level", self.font, "", (0, 0, 0),
-                         (self.screen.get_width()/2, self.screen.get_height()*0.48))
+                         (self.screen.get_width() / 2, self.screen.get_height() * 0.48))
         self.current_level = 0
         # Assets
         self.assets = {
@@ -357,7 +356,6 @@ class Game:
             9
         )
 
-
         self.levels.active_level = self.levels.levels_dict["0"]
         self.block_object_list = self.levels.active_level.load()
 
@@ -372,10 +370,9 @@ class Game:
             self.object_list.append(block)
         print(len(self.object_list), len(self.block_object_list))
 
-        self.bounds = Bounds(0, 0, self.object_list, 0, 640, 0, 320)
         # camera
         camera_obj = Obj(self.screen.get_width() / 2, self.screen.get_height() / 2, None)
-        self.camera = Cam(camera_obj, self.object_list, self.player, self.bounds)
+        self.camera = Cam(camera_obj, self.object_list, self.player)
 
         # layer rendering
         self.renderer = Renderer()
@@ -383,7 +380,6 @@ class Game:
 
         for obj in self.object_list:
             obj.walls = self.object_list
-
 
         # self.object_list[3] = None
 
@@ -494,7 +490,6 @@ class Game:
 
         # layered update
         self.renderer.render(self.screen, time_delta)
-
 
         self.canvas.renderUI(self.screen)
         if self.kills == self.levels.active_level.requirements:

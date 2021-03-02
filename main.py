@@ -105,7 +105,7 @@ while running:
 
     # pygame.draw.rect(screen, (255, 0, 0), rect or (0,0,0,0))
     pygame.display.flip()
-    # pygame.image.save(screen, "record/" + str(loop) + ".jpeg")
+    pygame.image.save(screen, "record/" + str(loop) + ".jpg")
     loop += 1
     last_time_dt = dt.now()
     last_time_ts = dt.timestamp(last_time_dt)
@@ -114,4 +114,4 @@ while running:
     current_time_dt = dt.now()
     current_time_ts = dt.timestamp(current_time_dt)
 
-    # clock.tick(60)
+    clock.tick(60)
