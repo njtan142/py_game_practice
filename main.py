@@ -93,7 +93,8 @@ while running:
                                 continue
                             if obj == scene_manager.active_scene.assets.player:
                                 continue
-                            if rect.colliderect(obj.rect):
+                            print(scene_manager.active_scene.assets.player)
+                            if rect.colliderect(obj.rect) and scene_manager.active_scene.assets.player.status.health > 0:
                                 obj.status.take_damage(scene_manager.active_scene.assets.player.status.power)
                                 if obj.status.health <= 0:
                                     scene_manager.active_scene.assets.kills += 1

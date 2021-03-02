@@ -287,8 +287,22 @@ class Game:
         self.dummy = Obj(0, 0, pygame.image.load(self.assets["dummy"]).convert_alpha(), True, 1, True, True)
         self.dummy.pygame = pygame
 
-        self.bullet = Bullet(300, 10, 0, self.screen, self.pygame, pygame.image.load(self.assets['grass']), self.player)
-
+        self.bullet_left_to_right = Bullet(300, 3 * self.current_level + 3, 0, 1,
+                                           self.screen, self.pygame,
+                                           pygame.image.load(self.assets['grass']),
+                                           self.player)
+        self.bullet_right_to_left = Bullet(300, 3 * self.current_level + 3, 0, -1,
+                                           self.screen, self.pygame,
+                                           pygame.image.load(self.assets['grass']),
+                                           self.player)
+        self.bullet_top_to_down = Bullet(300, 3 * self.current_level + 3, 1, 1,
+                                         self.screen, self.pygame,
+                                         pygame.image.load(self.assets['grass']),
+                                         self.player)
+        self.bullet_down_to_top = Bullet(300, 3 * self.current_level + 3, 1, -1,
+                                         self.screen, self.pygame,
+                                         pygame.image.load(self.assets['grass']),
+                                         self.player)
 
         # tile map creation
 
@@ -381,8 +395,6 @@ class Game:
         for obj in self.object_list:
             obj.walls = self.object_list
 
-        # self.object_list[3] = None
-
     def change_level(self, name=None):
         if self.kills is not self.levels.active_level.requirements:
             return
@@ -392,18 +404,16 @@ class Game:
         try:
             self.levels.active_level = self.levels.levels_dict[name]
         except KeyError:
-            print("uy")
             self.canvas.texts["continue to next level"].change_direction("You finished the game, no more levels")
             return
+
         self.canvas.texts["continue to next level"].change_direction("")
-        self.levels.active_level = self.levels.levels_dict[name]
         self.block_object_list = self.levels.levels_dict[name].load()
         self.kills = 0
         self.canvas.texts["kills counter"].change_direction(
             str(self.kills) + "/" + str(self.levels.active_level.requirements))
-        # frames counter (FPS)
-        self.fps = 0
 
+        # reset time_count
         self.time_count = 0
 
         # object list
@@ -415,18 +425,17 @@ class Game:
         print(len(self.object_list), len(self.block_object_list))
         for obj in self.object_list:
             obj.walls = self.object_list
-        self.bullet.bullets = []
+        self.bullet_left_to_right.bullets = []
+        self.bullet_right_to_left.bullets = []
+        self.bullet_top_to_down.bullets = []
+        self.bullet_down_to_top.bullets = []
+        self.bullet_left_to_right.damage = 3 * self.current_level + 3
+        self.bullet_right_to_left.damage = 3 * self.current_level + 3
+        self.bullet_top_to_down.damage = 3 * self.current_level + 3
+        self.bullet_down_to_top.damage = 3 * self.current_level + 3
 
     def run(self, time_delta):
-
-        # print(len(self.bullet.bullets))
-        # for obj in self.object_list:
-        #     if obj.entity:
-        #         if obj.status.health <= 0:
-        #             self.object_list.remove(obj)
-        #             obj = None
-        #             continue
-
+        # attack rects for collisions
         self.player.bottom_atk_rect = self.pygame.rect.Rect(self.player.x - 15, self.player.y + 8, 45, 30)
         self.player.top_atk_rect = self.pygame.rect.Rect(self.player.x - 15, self.player.y - 8, 45, 30)
         self.player.right_atk_rect = self.pygame.rect.Rect(self.player.x, self.player.y, 35, 40)
@@ -440,7 +449,7 @@ class Game:
         # background
         self.screen.fill((0, 0, 0))
 
-        #
+
         # player animation logics
         if vertical == 1:
             self.player.anim_c.set_state('walk down')
@@ -489,13 +498,15 @@ class Game:
         # player movement
         self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
 
-        # camera update
+        # camera movement update
         self.camera.update(self.object_list, self.screen)
 
-        # layered update
+        # layered update/render
         self.renderer.render(self.screen, time_delta)
 
+        # UI render
         self.canvas.renderUI(self.screen)
+
         if self.kills == self.levels.active_level.requirements:
             self.canvas.texts["continue to next level"].change_direction("Press enter to continue to next level")
         if self.player.status.health <= 0:
@@ -508,8 +519,16 @@ class Game:
             self.fps = 0
             self.time_count -= 1
             if self.kills != self.levels.active_level.requirements:
-                self.bullet.spawn()
+                self.bullet_left_to_right.spawn()
+                self.bullet_right_to_left.spawn()
+                self.bullet_top_to_down.spawn()
+                self.bullet_down_to_top.spawn()
             else:
-                self.bullet.bullets = []
-        self.bullet.move(time_delta)
-
+                self.bullet_left_to_right.bullets = []
+                self.bullet_right_to_left.bullets = []
+                self.bullet_top_to_down.bullets = []
+                self.bullet_down_to_top.bullets = []
+        self.bullet_left_to_right.move(time_delta)
+        self.bullet_right_to_left.move(time_delta)
+        self.bullet_top_to_down.move(time_delta)
+        self.bullet_down_to_top.move(time_delta)

@@ -23,7 +23,9 @@ def tile_map(tile_map_array, image, width, height, collision_list, spawns=[]):
                     else:
                         obj = tup[1]
                     obj.x = x
+                    obj.rect.x = x
                     obj.y = y
+                    obj.rect.y = y
                     row[0] = row[1]
 
             tile = Obj(x, y, image[int(row[0]) - 1], False)
