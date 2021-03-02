@@ -59,6 +59,7 @@ class Game:
         self.canvas.text("continue to next level", self.font, "", (0, 0, 0),
                          (self.screen.get_width() / 2, self.screen.get_height() * 0.48))
         self.current_level = 0
+        self.game_over = False
         # Assets
         self.assets = {
             'iu1': resource_path("assets/idle up1.png"),
@@ -177,6 +178,7 @@ class Game:
             "65": "assets/dungeon/65.png"
 
         }
+        self.canvas.image("test", self.assets["grass"], (0,0))
         # player
 
         self.screen = screen
@@ -370,7 +372,7 @@ class Game:
             9
         )
 
-        self.levels.active_level = self.levels.levels_dict["0"]
+        self.levels.active_level = self.levels.levels_dict[str(self.current_level)]
         self.block_object_list = self.levels.active_level.load()
 
         # frames counter (FPS)
@@ -396,15 +398,21 @@ class Game:
             obj.walls = self.object_list
 
     def change_level(self, name=None):
-        if self.kills is not self.levels.active_level.requirements:
-            return
-        if name is None:
-            name = str(self.current_level + 1)
-        self.current_level += 1
+        if self.player.status.health <= 0:
+            self.player.status.health = self.player.status.max_health
+            name = str(self.current_level)
+            print(name)
+        else:
+            if self.kills is not self.levels.active_level.requirements:
+                return
+            if name is None:
+                name = str(self.current_level + 1)
+            self.current_level += 1
         try:
             self.levels.active_level = self.levels.levels_dict[name]
         except KeyError:
             self.canvas.texts["continue to next level"].change_direction("You finished the game, no more levels")
+            self.game_over = True
             return
 
         self.canvas.texts["continue to next level"].change_direction("")
@@ -433,6 +441,8 @@ class Game:
         self.bullet_right_to_left.damage = 3 * self.current_level + 3
         self.bullet_top_to_down.damage = 3 * self.current_level + 3
         self.bullet_down_to_top.damage = 3 * self.current_level + 3
+
+        self.player.status.health = self.player.status.max_health
 
     def run(self, time_delta):
         # attack rects for collisions
@@ -507,10 +517,10 @@ class Game:
         # UI render
         self.canvas.renderUI(self.screen)
 
-        if self.kills == self.levels.active_level.requirements:
+        if self.kills == self.levels.active_level.requirements and not self.game_over:
             self.canvas.texts["continue to next level"].change_direction("Press enter to continue to next level")
         if self.player.status.health <= 0:
-            self.canvas.texts["continue to next level"].change_direction("Game Over")
+            self.canvas.texts["continue to next level"].change_direction("Game Over, press enter to restart`")
 
         self.fps += 1
         self.time_count += time_delta
@@ -519,10 +529,11 @@ class Game:
             self.fps = 0
             self.time_count -= 1
             if self.kills != self.levels.active_level.requirements:
-                self.bullet_left_to_right.spawn()
-                self.bullet_right_to_left.spawn()
-                self.bullet_top_to_down.spawn()
-                self.bullet_down_to_top.spawn()
+                if self.current_level > 0:
+                    self.bullet_left_to_right.spawn()
+                    self.bullet_right_to_left.spawn()
+                    self.bullet_top_to_down.spawn()
+                    self.bullet_down_to_top.spawn()
             else:
                 self.bullet_left_to_right.bullets = []
                 self.bullet_right_to_left.bullets = []

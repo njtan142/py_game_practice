@@ -7,6 +7,8 @@ class Anim:
         self.counter = 0
 
     def play(self, screen, time_delta, object, x_offset=0, y_offset=0):
+        if time_delta <= 0:
+            return
         
         self.counter += time_delta # for the animation to continue where it left
         

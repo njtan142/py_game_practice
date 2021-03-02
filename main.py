@@ -50,7 +50,7 @@ time_delta = 0.016  # 1/60 of a second
 time_scale = 1
 
 running = True
-timescale = 1
+
 loop = 0
 while running:
 
@@ -67,6 +67,7 @@ while running:
 
                 if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
                     scene_manager.active_scene.assets.change_level()
+
             if event.key == pygame.K_ESCAPE:
                 running = False
             if event.key == pygame.K_SPACE:
@@ -87,25 +88,24 @@ while running:
                         rect = scene_manager.active_scene.assets.player.right_atk_rect
 
                     for obj in scene_manager.active_scene.assets.object_list:
-                        # print(obj)
+
                         if obj.entity:
                             if obj.rect is None:
                                 continue
                             if obj == scene_manager.active_scene.assets.player:
                                 continue
-                            print(scene_manager.active_scene.assets.player)
-                            if rect.colliderect(obj.rect) and scene_manager.active_scene.assets.player.status.health > 0:
+
+                            if rect.colliderect(obj.rect) and scene_manager.active_scene.assets.player.status.health > 0 and obj.status.health > 0:
                                 obj.status.take_damage(scene_manager.active_scene.assets.player.status.power)
                                 if obj.status.health <= 0:
                                     scene_manager.active_scene.assets.kills += 1
-                                    scene_manager.active_scene.assets.canvas.texts["kills counter"].change_direction(
+                                    scene_manager.active_scene.assets.canvas.texts["kills counter"].change(
                                         str(scene_manager.active_scene.assets.kills) + "/" + str(
                                             scene_manager.active_scene.assets.levels.active_level.requirements))
 
     if scene_manager.active_scene is not None:
         scene_manager.active_scene.run(time_delta * time_scale)
 
-    # pygame.draw.rect(screen, (255, 0, 0), rect or (0,0,0,0))
     pygame.display.flip()
     # pygame.image.save(screen, "record/" + str(loop) + ".jpg")
     loop += 1
@@ -116,4 +116,4 @@ while running:
     current_time_dt = dt.now()
     current_time_ts = dt.timestamp(current_time_dt)
 
-    clock.tick(60)
+    # clock.tick(60)

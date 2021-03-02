@@ -29,6 +29,7 @@ class Object:
         # define the collision based on the image
         if image is None:
             self.rect = pygame.rect.Rect(x, y, 0, 0)
+            self.backup_rect = pygame.rect.Rect(x, y, 0, 0)
             self.o_w = 0
             self.o_h = 0
 
@@ -36,6 +37,7 @@ class Object:
             self.rect = pygame.rect.Rect(self.x, self.y, image.get_width(), image.get_height())
             self.o_w = image.get_width()
             self.o_h = image.get_height()
+            self.backup_rect = pygame.rect.Rect(self.x, self.y, image.get_width(), image.get_height())
 
         # for layered rendering
         self.layer = layer
@@ -50,11 +52,12 @@ class Object:
 
         self.walls = None
 
+
     def update(self, screen, time_delta):
         if self.entity:
             if self.status.health <= 0:
-                self.rect = None
                 return
+
         if self.is_automation and self.walls is not None:
             self.automation.movement(time_delta)
         # this is for chunked objects on the horizontal axis but will also work on unchunked obects
@@ -137,7 +140,7 @@ class Object:
                 if obj.collision:
                     if obj.rect is None:
                         continue
-                    if self.rect.colliderect(obj.rect):
+                    if self.rect.colliderect(obj.rect) and obj.status.health > 0:
                         if self.is_automation:
 
                             if obj.is_player and not obj.is_automation:
