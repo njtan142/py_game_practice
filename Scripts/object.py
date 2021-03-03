@@ -7,7 +7,7 @@ from Scripts.enemyMovement import AI
 
 class Object:
 
-    def __init__(self, x, y, image=None, is_player=False, layer=0, entity=False, automation=False):
+    def __init__(self, x, y, image=None, is_player=False, layer=0, entity=False, automation=False, status=()):
         self.entity = entity
         # core variables
         self.x = x
@@ -43,7 +43,11 @@ class Object:
         self.layer = layer
 
         # healthbar and status if it is an entity
-        self.status = Stats()
+        self.input_stats = status
+        try:
+            self.status = Stats(status[0], status[1], status[2])
+        except:
+            self.status = Stats()
         self.health_bar = HealthBar(self.status)
 
         self.is_automation = automation

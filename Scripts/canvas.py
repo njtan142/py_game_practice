@@ -5,17 +5,24 @@ class Canvas:
     def __init__(self, pygame, name):
         self.pygame = pygame
         self.name = name
-        self.texts = {}
-        self.images = {}
+        self.objects = {}
+        self.layers = []
 
-    def text(self, name, font, text, color, pos):
-        self.texts[name] = Text(self.pygame, font, text, color, pos)
+    def text(self, name, font, text, color, pos, layer=0):
+        if layer not in self.layers:
+            self.layers.append(layer)
+        self.objects[name] = Text(self.pygame, font, text, color, pos, layer)
+        self.layers.sort()
 
-    def image(self, name, path, pos):
-        self.images[name] = Image(self.pygame, path, pos)
+    def image(self, name, path, pos, layer=0):
+        if layer not in self.layers:
+            self.layers.append(layer)
+        self.objects[name] = Image(self.pygame, path, pos, layer)
+        self.layers.sort()
 
     def renderUI(self, screen):
-        for ui in self.texts:
-            self.texts[ui].update(screen)
-        for ui in self.images:
-            self.images[ui].update(screen)
+        for layer in self.layers:
+            for ui in self.objects:
+                if not self.objects[ui].disabled and self.objects[ui].layer is layer:
+                    self.objects[ui].update(screen)
+

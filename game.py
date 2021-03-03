@@ -8,6 +8,7 @@ from Scripts.canvas import Canvas
 from Scripts.bullet import Bullet
 import sys
 import os
+import json
 
 
 def resource_path(relative_path):
@@ -26,6 +27,12 @@ def get_layout(path):
     return layout
 
 
+player_data = open("Data/player.json", 'r')
+pd = player_data.read()
+player_data.close()
+pd_json = json.loads(pd)
+
+
 # stand alone functions
 def get_distance(object1, object2, x1, y1):
     x_1 = object1.x + x1 - object2.x
@@ -37,12 +44,6 @@ def get_distance(object1, object2, x1, y1):
     return result
 
 
-# assets
-
-# levels
-# level 1
-
-
 class Game:
     # pygame initialization
     def __init__(self, pygame, screen):
@@ -51,15 +52,22 @@ class Game:
         self.screen = screen
         self.clock = pygame.time.Clock()
         self.canvas = Canvas(pygame, "canvas")
-        self.font = pygame.font.SysFont(None, 24)
-        self.canvas.text("kills", self.font, "Kills: ", (255, 0, 0), (self.screen.get_width() * 0.05, 10))
+        self.font = pygame.font.Font("pixel.ttf", 18)
+        self.canvas.text("kills", self.font, "Kills: ",
+                         (255, 0, 0),
+                         (self.screen.get_width() * 0.05, self.screen.get_height() * 0.05))
         self.kills = 0
-        self.canvas.text("kills counter", self.font, str(self.kills), (255, 255, 255),
-                         (self.screen.get_width() * 0.15, 10))
-        self.canvas.text("continue to next level", self.font, "", (0, 0, 0),
-                         (self.screen.get_width() / 2, self.screen.get_height() * 0.48))
+        self.canvas.text("kills counter", self.font, str(self.kills),
+                         (255, 255, 255),
+                         (self.screen.get_width() * 0.15, self.screen.get_height() * 0.05)
+                         )
+        self.canvas.text("continue to next level", self.font, "Press enter to continue to next level", (0, 0, 0),
+                         (self.screen.get_width() / 2, self.screen.get_height() * 0.48), 12
+                         )
+        self.canvas.objects["continue to next level"].disabled = True
         self.current_level = 0
         self.game_over = False
+        self.is_paused = False
         # Assets
         self.assets = {
             'iu1': resource_path("assets/idle up1.png"),
@@ -142,7 +150,7 @@ class Game:
             'ss_ad2': resource_path("assets/ss/attack down_01_03.png"),
             'ss_ad3': resource_path("assets/ss/attack down_01_02.png"),
             'ss_ad4': resource_path("assets/ss/attack down_01_01.png"),
-            "grass": "assets/bullet.png",
+            "grass": "assets/grass.png",
             "block": "assets/block.png",
             "block2": "assets/block2.png",
             "dummy": "assets/enemies/dummy.png",
@@ -175,10 +183,16 @@ class Game:
             "62": "assets/dungeon/62.png",
             "63": "assets/dungeon/63.png",
             "64": "assets/dungeon/64.png",
-            "65": "assets/dungeon/65.png"
+            "65": "assets/dungeon/65.png",
+            "paused_bg": "assets/paused_bg.png",
+            "bullet": "assets/bullet.png"
 
         }
-        self.canvas.image("test", self.assets["grass"], (0,0))
+        self.canvas.image("paused_bg",
+                          self.assets["paused_bg"],
+                          (self.screen.get_width()/2, self.screen.get_height()/2),
+                          1)
+        self.canvas.objects["paused_bg"].disabled = True
         # player
 
         self.screen = screen
@@ -284,26 +298,29 @@ class Game:
         self.player.right_atk_rect = self.pygame.rect.Rect(self.player.x, self.player.y, 35, 40)
         self.player.left_atk_rect = self.pygame.rect.Rect(self.player.x - 20, self.player.y, 35, 40)
         self.player.pygame = pygame
-        self.player.status.power = 30
-
-        self.dummy = Obj(0, 0, pygame.image.load(self.assets["dummy"]).convert_alpha(), True, 1, True, True)
+        self.player.status.power = pd_json['power']
+        self.player.status.defense = pd_json['defense']
+        self.player.status.max_health = pd_json['health']
+        self.player.status.health = self.player.status.max_health
+        self.player_exp = 0
+        self.dummy = Obj(0, 0, pygame.image.load(self.assets["dummy"]).convert_alpha(), True, 1, True, True, (10, 5, 2))
         self.dummy.pygame = pygame
 
         self.bullet_left_to_right = Bullet(300, 3 * self.current_level + 3, 0, 1,
                                            self.screen, self.pygame,
-                                           pygame.image.load(self.assets['grass']),
+                                           pygame.image.load(self.assets['bullet']),
                                            self.player)
         self.bullet_right_to_left = Bullet(300, 3 * self.current_level + 3, 0, -1,
                                            self.screen, self.pygame,
-                                           pygame.image.load(self.assets['grass']),
+                                           pygame.image.load(self.assets['bullet']),
                                            self.player)
         self.bullet_top_to_down = Bullet(300, 3 * self.current_level + 3, 1, 1,
                                          self.screen, self.pygame,
-                                         pygame.image.load(self.assets['grass']),
+                                         pygame.image.load(self.assets['bullet']),
                                          self.player)
         self.bullet_down_to_top = Bullet(300, 3 * self.current_level + 3, 1, -1,
                                          self.screen, self.pygame,
-                                         pygame.image.load(self.assets['grass']),
+                                         pygame.image.load(self.assets['bullet']),
                                          self.player)
 
         # tile map creation
@@ -371,6 +388,34 @@ class Game:
             [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
             9
         )
+        self.levels.levels_dict["3"] = Level(
+            '0', get_layout('Levels/3.txt'),
+            self.block_img_list,
+            self.block_collisions,
+            [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
+            0
+        )
+        self.levels.levels_dict["4"] = Level(
+            '0', get_layout('Levels/4.txt'),
+            self.block_img_list,
+            self.block_collisions,
+            [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
+            0
+        )
+        self.levels.levels_dict["5"] = Level(
+            '0', get_layout('Levels/5.txt'),
+            self.block_img_list,
+            self.block_collisions,
+            [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
+            0
+        )
+        self.levels.levels_dict["6"] = Level(
+            '0', get_layout('Levels/6.txt'),
+            self.block_img_list,
+            self.block_collisions,
+            [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
+            0
+        )
 
         self.levels.active_level = self.levels.levels_dict[str(self.current_level)]
         self.block_object_list = self.levels.active_level.load()
@@ -411,14 +456,14 @@ class Game:
         try:
             self.levels.active_level = self.levels.levels_dict[name]
         except KeyError:
-            self.canvas.texts["continue to next level"].change_direction("You finished the game, no more levels")
+            self.canvas.objects["continue to next level"].change("You finished the game, no more levels")
             self.game_over = True
             return
-
-        self.canvas.texts["continue to next level"].change_direction("")
+        self.camera.initialized = False
+        self.canvas.objects["continue to next level"].disabled = True
         self.block_object_list = self.levels.levels_dict[name].load()
         self.kills = 0
-        self.canvas.texts["kills counter"].change_direction(
+        self.canvas.objects["kills counter"].change(
             str(self.kills) + "/" + str(self.levels.active_level.requirements))
 
         # reset time_count
@@ -444,6 +489,16 @@ class Game:
 
         self.player.status.health = self.player.status.max_health
 
+    def save(self):
+        save = json.dumps(pd_json)
+        pd_path = player_data.name
+        new_data = open(pd_path, "w")
+        new_data.write(save)
+        new_data.close()
+
+    def add_exp(self, exp):
+        pd_json["experience"] += exp
+
     def run(self, time_delta):
         # attack rects for collisions
         self.player.bottom_atk_rect = self.pygame.rect.Rect(self.player.x - 15, self.player.y + 8, 45, 30)
@@ -458,7 +513,6 @@ class Game:
 
         # background
         self.screen.fill((0, 0, 0))
-
 
         # player animation logics
         if vertical == 1:
@@ -506,7 +560,7 @@ class Game:
                     self.player.attacking = False
 
         # player movement
-        self.player.move(horizontal * 100 * time_delta, vertical * 100 * time_delta, self.object_list)
+        self.player.move(horizontal * 200 * time_delta, vertical * 200 * time_delta, self.object_list)
 
         # camera movement update
         self.camera.update(self.object_list, self.screen)
@@ -514,13 +568,20 @@ class Game:
         # layered update/render
         self.renderer.render(self.screen, time_delta)
 
+
+
+        if self.kills == self.levels.active_level.requirements and not self.game_over:
+            self.canvas.objects["continue to next level"].disabled = False
+
+        if self.player.status.health <= 0:
+            self.canvas.objects["continue to next level"].change("Game Over, press enter to restart`")
+
+        if self.is_paused:
+            self.canvas.objects["paused_bg"].disabled = False
+
         # UI render
         self.canvas.renderUI(self.screen)
 
-        if self.kills == self.levels.active_level.requirements and not self.game_over:
-            self.canvas.texts["continue to next level"].change_direction("Press enter to continue to next level")
-        if self.player.status.health <= 0:
-            self.canvas.texts["continue to next level"].change_direction("Game Over, press enter to restart`")
 
         self.fps += 1
         self.time_count += time_delta

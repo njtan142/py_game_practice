@@ -16,7 +16,7 @@ def tile_map(tile_map_array, image, width, height, collision_list, spawns=[]):
                 if row[0] == tup[0]:
                     if tup[3]:
                         obj = Obj(x, y, tup[1].image, tup[1].is_player, tup[1].layer, tup[1].entity,
-                                  tup[1].is_automation)
+                                  tup[1].is_automation, tup[1].input_stats)
                         if obj.entity:
                             obj.pygame = tup[1].pygame
                         objects.append(obj)
