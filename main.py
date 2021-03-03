@@ -63,13 +63,26 @@ while running:
             if event.key == pygame.K_RETURN:
                 if scene_manager.active_scene != scene_manager.scenes["game_scene"]:
                     scene_manager.active_scene = scene_manager.scenes["game_scene"]
+                    scene_manager.active_scene.assets.is_paused = False
+                    time_scale = 1
                     continue
 
                 if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
-                    scene_manager.active_scene.assets.change_level()
+                    if scene_manager.active_scene.assets.is_paused is False:
+                        scene_manager.active_scene.assets.change_level()
+                    if scene_manager.active_scene.assets.is_paused is True:
+                        scene_manager.active_scene = scene_manager.scenes["menu_scene"]
 
             if event.key == pygame.K_ESCAPE:
-                running = False
+                if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
+                    if scene_manager.active_scene.assets.is_paused is True:
+                        time_scale = 1
+                        scene_manager.active_scene.assets.is_paused = False
+                    else:
+                        scene_manager.active_scene.assets.is_paused = True
+                        time_scale = 0
+                if scene_manager.active_scene == scene_manager.scenes["menu_scene"]:
+                    running = False
             if event.key == pygame.K_SPACE:
                 if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
                     scene_manager.active_scene.assets.player.attacking = True
@@ -120,3 +133,4 @@ while running:
     current_time_ts = dt.timestamp(current_time_dt)
 
     # clock.tick(60)
+pygame.quit()

@@ -14,4 +14,5 @@ class Menu:
                          (self.screen.get_width() / 2, self.screen.get_height() * 0.6))
 
     def run(self, time_delta):
+        self.screen.fill((0, 0, 0))
         self.canvas.renderUI(self.screen)

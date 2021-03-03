@@ -190,7 +190,7 @@ class Game:
         }
         self.canvas.image("paused_bg",
                           self.assets["paused_bg"],
-                          (self.screen.get_width()/2, self.screen.get_height()/2),
+                          (self.screen.get_width() / 2, self.screen.get_height() / 2),
                           1)
         self.canvas.objects["paused_bg"].disabled = True
         # player
@@ -442,8 +442,8 @@ class Game:
         for obj in self.object_list:
             obj.walls = self.object_list
 
-    def change_level(self, name=None):
-        if self.player.status.health <= 0:
+    def change_level(self, name=None, reload=False):
+        if self.player.status.health <= 0 or reload:
             self.player.status.health = self.player.status.max_health
             name = str(self.current_level)
             print(name)
@@ -488,6 +488,8 @@ class Game:
         self.bullet_down_to_top.damage = 3 * self.current_level + 3
 
         self.player.status.health = self.player.status.max_health
+
+
 
     def save(self):
         save = json.dumps(pd_json)
@@ -568,8 +570,6 @@ class Game:
         # layered update/render
         self.renderer.render(self.screen, time_delta)
 
-
-
         if self.kills == self.levels.active_level.requirements and not self.game_over:
             self.canvas.objects["continue to next level"].disabled = False
 
@@ -578,10 +578,9 @@ class Game:
 
         if self.is_paused:
             self.canvas.objects["paused_bg"].disabled = False
-
-        # UI render
-        self.canvas.renderUI(self.screen)
-
+            self.canvas.objects["continue to next level"].disabled = True
+        else:
+            self.canvas.objects["paused_bg"].disabled = True
 
         self.fps += 1
         self.time_count += time_delta
@@ -604,3 +603,6 @@ class Game:
         self.bullet_right_to_left.move(time_delta)
         self.bullet_top_to_down.move(time_delta)
         self.bullet_down_to_top.move(time_delta)
+
+        # UI render
+        self.canvas.renderUI(self.screen)
