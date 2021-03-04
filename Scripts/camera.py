@@ -23,3 +23,5 @@ class Camera:
             return
         for obj in object_list:
             obj.move(x * 1.99999, y * 1.99999, object_list)
+        if x > 0 or y > 0:
+            return True

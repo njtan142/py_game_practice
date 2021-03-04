@@ -129,6 +129,8 @@ while running:
                 if scene_manager.active_scene.assets.canvas.objects["play"].rect.collidepoint(event.pos):
                     if scene_manager.active_scene.assets.canvas.objects["play"].disabled is False:
                         scene_manager.active_scene = scene_manager.scenes["game_scene"]
+                        scene_manager.active_scene.assets.is_paused = False
+                        time_scale = 1
                         continue
                 if scene_manager.active_scene.assets.canvas.objects["exit"].rect.collidepoint(event.pos):
                     if scene_manager.active_scene.assets.canvas.objects["exit"].disabled is False:

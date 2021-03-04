@@ -449,6 +449,21 @@ class Game:
             [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
             0
         )
+        self.levels.levels_dict["7"] = Level(
+            '0', get_layout('Levels/7.txt'),
+            self.block_img_list,
+            self.block_collisions,
+            [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
+            0
+        )
+        self.levels.levels_dict["8"] = Level(
+            '0', get_layout('Levels/8.txt'),
+            self.block_img_list,
+            self.block_collisions,
+            [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
+            0
+        )
+
 
         self.levels.active_level = self.levels.levels_dict[str(self.current_level)]
         self.block_object_list = self.levels.active_level.load()
@@ -599,10 +614,9 @@ class Game:
         self.player.move(horizontal * 200 * time_delta, vertical * 200 * time_delta, self.object_list)
 
         # camera movement update
-        self.camera.update(self.object_list, self.screen)
-
-        # layered update/render
-        self.renderer.render(self.screen, time_delta)
+        if not self.camera.update(self.object_list, self.screen):
+            # layered update/render
+            self.renderer.render(self.screen, time_delta)
 
         if self.kills == self.levels.active_level.requirements and not self.game_over:
             self.canvas.objects["continue to next level"].change("Press enter to continue to next level")
@@ -611,8 +625,6 @@ class Game:
         if self.player.status.health <= 0:
             self.canvas.objects["continue to next level"].change("Game Over, press enter to restart`")
             self.canvas.objects["continue to next level"].disabled = False
-
-
 
         if self.is_paused:
             self.canvas.objects["paused_bg"].disabled = False
