@@ -72,6 +72,12 @@ while running:
                         scene_manager.active_scene.assets.change_level()
                     if scene_manager.active_scene.assets.is_paused is True:
                         scene_manager.active_scene = scene_manager.scenes["menu_scene"]
+            if event.key == pygame.K_r:
+                if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
+                    if scene_manager.active_scene.assets.is_paused is True:
+                        scene_manager.active_scene.assets.change_level(None, True)
+                        scene_manager.active_scene.assets.is_paused = False
+                        time_scale = 1
 
             if event.key == pygame.K_ESCAPE:
                 if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
@@ -85,6 +91,8 @@ while running:
                     running = False
             if event.key == pygame.K_SPACE:
                 if scene_manager.active_scene == scene_manager.scenes["game_scene"]:
+                    if scene_manager.active_scene.assets.is_paused is True:
+                        continue
                     scene_manager.active_scene.assets.player.attacking = True
                     direction = scene_manager.active_scene.assets.player_state
 
@@ -116,6 +124,37 @@ while running:
                                     scene_manager.active_scene.assets.canvas.objects["kills counter"].change(
                                         str(scene_manager.active_scene.assets.kills) + "/" + str(
                                             scene_manager.active_scene.assets.levels.active_level.requirements))
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if scene_manager.active_scene is scene_manager.scenes["menu_scene"]:
+                if scene_manager.active_scene.assets.canvas.objects["play"].rect.collidepoint(event.pos):
+                    if scene_manager.active_scene.assets.canvas.objects["play"].disabled is False:
+                        scene_manager.active_scene = scene_manager.scenes["game_scene"]
+                        continue
+                if scene_manager.active_scene.assets.canvas.objects["exit"].rect.collidepoint(event.pos):
+                    if scene_manager.active_scene.assets.canvas.objects["exit"].disabled is False:
+                        running = False
+            if scene_manager.active_scene is scene_manager.scenes["game_scene"]:
+                if scene_manager.active_scene.assets.canvas.objects["resume"].rect.collidepoint(event.pos):
+                    if scene_manager.active_scene.assets.canvas.objects["resume"].disabled is False:
+                        time_scale = 1
+                        scene_manager.active_scene.assets.is_paused = False
+                        continue
+                if scene_manager.active_scene.assets.canvas.objects["restart"].rect.collidepoint(event.pos):
+                    if scene_manager.active_scene.assets.canvas.objects["restart"].disabled is False:
+                        scene_manager.active_scene.assets.change_level(None, True)
+                        scene_manager.active_scene.assets.is_paused = False
+                        time_scale = 1
+                        continue
+                if scene_manager.active_scene.assets.canvas.objects["paused_main_menu"].rect.collidepoint(event.pos):
+                    if scene_manager.active_scene.assets.canvas.objects["paused_main_menu"].disabled is False:
+                        scene_manager.active_scene = scene_manager.scenes["menu_scene"]
+                        continue
+                if scene_manager.active_scene.assets.canvas.objects["pause"].rect.collidepoint(event.pos):
+                    if scene_manager.active_scene.assets.canvas.objects["pause"].disabled is False:
+                        scene_manager.active_scene.assets.is_paused = True
+                        time_scale = 0
+                        continue
+
 
     if scene_manager.active_scene is not None:
         scene_manager.active_scene.run(time_delta * time_scale)

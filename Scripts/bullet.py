@@ -42,7 +42,6 @@ class Bullet:
         self.bullets.append(bullet)
 
     def move(self, time_delta):
-        print(self.target.status.health)
         for bullet in self.bullets:
             if self.axis == 0:
                 bullet.move(self.direction * self.speed * time_delta, 0)

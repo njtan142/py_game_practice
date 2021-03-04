@@ -1,4 +1,4 @@
-from Scripts.ui import Text, Image
+from Scripts.ui import Text, Image, Rect
 
 
 class Canvas:
@@ -18,6 +18,12 @@ class Canvas:
         if layer not in self.layers:
             self.layers.append(layer)
         self.objects[name] = Image(self.pygame, path, pos, layer)
+        self.layers.sort()
+
+    def rect(self, name, pos, dimension, color, layer=0):
+        if layer not in self.layers:
+            self.layers.append(layer)
+        self.objects[name] = Rect(self.pygame, pos, dimension, color, layer)
         self.layers.sort()
 
     def renderUI(self, screen):

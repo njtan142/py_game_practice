@@ -52,7 +52,7 @@ class Game:
         self.screen = screen
         self.clock = pygame.time.Clock()
         self.canvas = Canvas(pygame, "canvas")
-        self.font = pygame.font.Font("pixel.ttf", 18)
+        self.font = pygame.font.Font("pixel.ttf", 24)
         self.canvas.text("kills", self.font, "Kills: ",
                          (255, 0, 0),
                          (self.screen.get_width() * 0.05, self.screen.get_height() * 0.05))
@@ -185,6 +185,7 @@ class Game:
             "64": "assets/dungeon/64.png",
             "65": "assets/dungeon/65.png",
             "paused_bg": "assets/paused_bg.png",
+            "pause": "assets/pause.png",
             "bullet": "assets/bullet.png"
 
         }
@@ -192,7 +193,39 @@ class Game:
                           self.assets["paused_bg"],
                           (self.screen.get_width() / 2, self.screen.get_height() / 2),
                           1)
+        self.canvas.text("paused_title",
+                         self.font,
+                         "Paused",
+                         (255, 255, 0),
+                         (self.screen.get_width() / 2, self.screen.get_height() * 0.3),
+                         2)
+        self.canvas.text("paused_main_menu",
+                         self.font,
+                         "Main Menu",
+                         (255, 255, 0),
+                         (self.screen.get_width() / 2, self.screen.get_height() * 0.7),
+                         2)
+        self.canvas.text("resume",
+                         self.font,
+                         "Resume",
+                         (255, 255, 0),
+                         (self.screen.get_width() / 2, self.screen.get_height() * 0.43),
+                         2)
+        self.canvas.text("restart",
+                         self.font,
+                         "Restart",
+                         (255, 255, 0),
+                         (self.screen.get_width() / 2, self.screen.get_height() * 0.55),
+                         2)
+        self.canvas.image("pause",
+                          self.assets["pause"],
+                          (self.screen.get_width() * 0.95, self.screen.get_height() * 0.1),
+                          1)
         self.canvas.objects["paused_bg"].disabled = True
+        self.canvas.objects["paused_title"].disabled = True
+        self.canvas.objects["paused_main_menu"].disabled = True
+        self.canvas.objects["resume"].disabled = True
+        self.canvas.objects["restart"].disabled = True
         # player
 
         self.screen = screen
@@ -393,14 +426,14 @@ class Game:
             self.block_img_list,
             self.block_collisions,
             [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
-            0
+            11
         )
         self.levels.levels_dict["4"] = Level(
             '0', get_layout('Levels/4.txt'),
             self.block_img_list,
             self.block_collisions,
             [('s', self.player, 21, False), ('d', self.dummy, 20, True)],
-            0
+            12
         )
         self.levels.levels_dict["5"] = Level(
             '0', get_layout('Levels/5.txt'),
@@ -446,7 +479,7 @@ class Game:
         if self.player.status.health <= 0 or reload:
             self.player.status.health = self.player.status.max_health
             name = str(self.current_level)
-            print(name)
+            self.add_exp(-self.player_exp)
         else:
             if self.kills is not self.levels.active_level.requirements:
                 return
@@ -463,6 +496,7 @@ class Game:
         self.canvas.objects["continue to next level"].disabled = True
         self.block_object_list = self.levels.levels_dict[name].load()
         self.kills = 0
+        self.player_exp = 0
         self.canvas.objects["kills counter"].change(
             str(self.kills) + "/" + str(self.levels.active_level.requirements))
 
@@ -488,8 +522,7 @@ class Game:
         self.bullet_down_to_top.damage = 3 * self.current_level + 3
 
         self.player.status.health = self.player.status.max_health
-
-
+        pd_json["level_reached"] = self.current_level
 
     def save(self):
         save = json.dumps(pd_json)
@@ -500,6 +533,7 @@ class Game:
 
     def add_exp(self, exp):
         pd_json["experience"] += exp
+        self.player_exp += exp
 
     def run(self, time_delta):
         # attack rects for collisions
@@ -571,16 +605,28 @@ class Game:
         self.renderer.render(self.screen, time_delta)
 
         if self.kills == self.levels.active_level.requirements and not self.game_over:
+            self.canvas.objects["continue to next level"].change("Press enter to continue to next level")
             self.canvas.objects["continue to next level"].disabled = False
 
         if self.player.status.health <= 0:
             self.canvas.objects["continue to next level"].change("Game Over, press enter to restart`")
+            self.canvas.objects["continue to next level"].disabled = False
+
+
 
         if self.is_paused:
             self.canvas.objects["paused_bg"].disabled = False
+            self.canvas.objects["paused_title"].disabled = False
+            self.canvas.objects["paused_main_menu"].disabled = False
+            self.canvas.objects["resume"].disabled = False
+            self.canvas.objects["restart"].disabled = False
             self.canvas.objects["continue to next level"].disabled = True
         else:
             self.canvas.objects["paused_bg"].disabled = True
+            self.canvas.objects["paused_title"].disabled = True
+            self.canvas.objects["paused_main_menu"].disabled = True
+            self.canvas.objects["resume"].disabled = True
+            self.canvas.objects["restart"].disabled = True
 
         self.fps += 1
         self.time_count += time_delta
